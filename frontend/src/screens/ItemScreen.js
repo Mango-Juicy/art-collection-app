@@ -20,14 +20,11 @@ function ItemScreen({ }) {
 
   useEffect(() => {
     dispatch(listProductDetails(`${params.id}`))
-
-  }, [dispatch, params])
-
+  }, [dispatch])
 
 
-  const addToCartEventHandler = ((id, qty) => {
-    navigate(`/cart/${id}`, { state: qty })
-
+  const addToCartEventHandler = ((id) => {
+    navigate(`/cart/${id}`)
   })
 
   return (
@@ -49,13 +46,15 @@ function ItemScreen({ }) {
 
         <h5>{product.price}</h5> 
 
+        <h5>{product.available ? "Available" : "Not Available"}</h5> 
+
       </Row>
 
       <Button 
         className='btn-block'
-        onClick={() => addToCartEventHandler(`${params.id}`, qty)}
+        onClick={() => addToCartEventHandler(`${params.id}`)}
         type='button' 
-        disabled={product.countInStock === 0}
+        disabled={product.available === false}
       >I'm interested
       </Button>
        

@@ -18,7 +18,6 @@ function Gallery() {
 
   useEffect(() => {
     dispatch(listProducts())
-
   }, [])
 
 
