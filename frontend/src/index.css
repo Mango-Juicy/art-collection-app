@@ -2,7 +2,8 @@
 
 
 #root{ 
-  /* background-color: #141414; */
+   background-color: #242424;
+   font-family: 'Century Gothic';
   /* background-image: url("../public/images/fluid_colors.jpg");
   background-position: center;
   background-repeat: no-repeat;
@@ -15,6 +16,10 @@ main{
 
 h3{
   padding: 1rem 0;
+}
+
+p{
+  white-space: pre-line;
 }
 
 .rating span{
@@ -76,5 +81,8 @@ h3{
   background-color: #000000;
 }
 .c-gray{
-  background-color: #121212 !important;
+  background-color: #242424 !important;
+}
+.c-orange{
+  background-color: #f90 !important;
 }

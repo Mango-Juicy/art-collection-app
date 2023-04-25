@@ -7,7 +7,7 @@ import { Row, Col } from 'react-bootstrap'
 
 import GalleryCard from './GalleryCard';
 
-function Gallery() {
+function Gallery({idCategory}) {
 
   const dispatch = useDispatch()
   const productList = useSelector(state => state.productList)
@@ -17,8 +17,8 @@ function Gallery() {
   const colWFull = {span: 8, offset: 2}
 
   useEffect(() => {
-    dispatch(listProducts())
-  }, [])
+    dispatch(listProducts(idCategory))
+  }, [idCategory])
 
 
   return (

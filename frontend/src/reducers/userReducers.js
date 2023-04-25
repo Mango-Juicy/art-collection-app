@@ -36,7 +36,8 @@ export const UserReducer = (state = {}, action) => {
         case USER_LOGIN_FAIL || USER_REGISTER_FAIL || USER_DETAILS_FAIL || USER_UPDATE_PROFILE_FAIL:
             return { 
                 loading: false, 
-                error: action.payload 
+                error: action.payload, 
+                success: false
             }
 
         case USER_LOGOUT || USER_UPDATE_PROFILE_RESET:
@@ -47,84 +48,84 @@ export const UserReducer = (state = {}, action) => {
     }
 }
 
-export const UserRegisterReducer = (state = {}, action) => {
-    switch (action.type) {
-        case USER_REGISTER_REQUEST:
-            return { loading: true }
+// export const UserRegisterReducer = (state = {}, action) => {
+//     switch (action.type) {
+//         case USER_REGISTER_REQUEST:
+//             return { loading: true }
 
-        case USER_REGISTER_SUCCESS:
-            return {
-                loading: false,
-                userInfo: action.payload,
-            }
+//         case USER_REGISTER_SUCCESS:
+//             return {
+//                 loading: false,
+//                 userInfo: action.payload,
+//             }
 
-        case USER_REGISTER_FAIL:
-            return { 
-                loading: false, 
-                error: action.payload 
-            }
+//         case USER_REGISTER_FAIL:
+//             return { 
+//                 loading: false, 
+//                 error: action.payload 
+//             }
 
-        case USER_LOGOUT:
-            return {}
+//         case USER_LOGOUT:
+//             return {}
 
-        default:
-            return state
-    }
-}
+//         default:
+//             return state
+//     }
+// }
 
-export const UserDetailsReducer = (state = {}, action) => {
+// export const UserDetailsReducer = (state = {}, action) => {
 
-    switch (action.type) {
-        case USER_DETAILS_REQUEST:
-            return { 
-                ...state, 
-                loading: true 
-            }
+//     switch (action.type) {
+//         case USER_DETAILS_REQUEST:
+//             return { 
+//                 ...state, 
+//                 loading: true 
+//             }
 
-        case USER_DETAILS_SUCCESS:
-            return {
-                loading: false,
-                userInfo: action.payload,
-            }
+//         case USER_DETAILS_SUCCESS:
+//             return {
+//                 loading: false,
+//                 userInfo: action.payload,
+//             }
 
-        case USER_DETAILS_FAIL:
-            return { 
-                loading: false, 
-                error: action.payload 
-            }
+//         case USER_DETAILS_FAIL:
+//             return { 
+//                 loading: false, 
+//                 error: action.payload 
+//             }
     
-        case USER_LOGOUT:
-            return {}
+//         case USER_LOGOUT:
+//             return {}
 
-        default:
-            return state
-    }
-}
+//         default:
+//             return state
+//     }
+// }
 
-export const UserUpdateProfileReducer = (state = {}, action) => {
+// export const UserUpdateProfileReducer = (state = {}, action) => {
 
-    switch (action.type) {
-        case USER_UPDATE_PROFILE_REQUEST:
-            return { loading: true }
+//     switch (action.type) {
+//         case USER_UPDATE_PROFILE_REQUEST:
+//             return { loading: true }
 
-        case USER_UPDATE_PROFILE_SUCCESS:
-            return {
-                loading: false, 
-                userInfo: action.payload, 
-                success: true
-            }
+//         case USER_UPDATE_PROFILE_SUCCESS:
+//             return {
+//                 loading: false, 
+//                 userInfo: action.payload, 
+//                 success: true
+//             }
 
-        case USER_UPDATE_PROFILE_FAIL:
-            return { 
-                loading: false, 
-                error: action.payload 
-            }
+//         case USER_UPDATE_PROFILE_FAIL:
+//             return { 
+//                 loading: false, 
+//                 error: action.payload 
+//             }
 
 
-        case USER_UPDATE_PROFILE_RESET:
-            return {}
+//         case USER_UPDATE_PROFILE_RESET:
+//             return {}
 
-        default:
-            return state
-    }
-}
+//         default:
+//             return state
+//     }
+// }

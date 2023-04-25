@@ -5,10 +5,10 @@ import Gallery from '../components/Gallery'
 import Story from '../components/Story'
 
 
-function EventsScreen() {  
+function EventsScreen({idCategory}) {  
 
   return (
-    <Story></Story>
+    <Story idCategory={idCategory}></Story>
   )
 }
 

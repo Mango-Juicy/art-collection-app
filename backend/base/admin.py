@@ -2,10 +2,25 @@ from django.contrib import admin
 from .models import *
 
 # Register your models here.
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    exclude = ['createdBy','modifiedBy']
 
-admin.site.register(Product)
-admin.site.register(Review)
-admin.site.register(Order)
-admin.site.register(OrderItem)
-admin.site.register(ShippingAddress)
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            # Only set createdBy during the first save.
+            obj.createdBy = request.user
+        obj.modifiedBy = request.user
+        super().save_model(request, obj, form, change)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    exclude = ['createdBy','modifiedBy']
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            # Only set createdBy during the first save.
+            obj.createdBy = request.user
+        obj.modifiedBy = request.user
+        super().save_model(request, obj, form, change)
 

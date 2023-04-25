@@ -7,12 +7,12 @@ class SecUserInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
+            username: this.props.userInfo.username,
             password:  "",
             confirmPassword:  "",
-            firstName:  "",
-            lastName: "",
-            email: ""
+            firstName:  this.props.userInfo.first_name,
+            lastName: this.props.userInfo.last_name,
+            email: this.props.userInfo.email
         }
     }
 

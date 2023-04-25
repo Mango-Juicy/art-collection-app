@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 
 function GalleryCard({ product }) {
   return (
-    <Card className="my-5 px-2 rounded border-0" >
+    <Card className="my-2 px-2 border-0 c-gray" >
       <Link to={`/product/${product._id}`}  style={{ textDecoration: 'none' }}>
         
-        <Card.Img className="border-0 rounded" src={product.image}   />   
+        <Card.Img className="border-0 " src={product.image}   />   
 
-        <Card.Body className="text-center mb-5 mt-3">
+        <Card.Body className="text-center text-white mb-3 mt-3">
           <Card.Title as="div">
             <strong className=''>{product.name}</strong>
           </Card.Title>    

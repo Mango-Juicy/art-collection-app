@@ -4,10 +4,10 @@ import { Container } from 'react-bootstrap'
 import Gallery from '../components/Gallery'
 
 
-function GalleryScreen() {  
+function GalleryScreen({idCategory}) {  
 
   return (
-    <Gallery></Gallery>
+    <Gallery idCategory={idCategory}></Gallery>
   )
 }
 

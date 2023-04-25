@@ -31,7 +31,7 @@ function ItemScreen({ }) {
     <div>
 
       <Row className='mb-4'>       
-          <h1>{product.name}</h1>     
+        <h1 className='text-white'>{product.name}</h1>     
       </Row>
 
       <Row>       
@@ -42,11 +42,9 @@ function ItemScreen({ }) {
 
       <Row className='m-4'>      
 
-        <h5>{product.description}</h5> 
-
-        <h5>{product.price}</h5> 
-
-        <h5>{product.available ? "Available" : "Not Available"}</h5> 
+        <h5 className='text-white'>{product.description}</h5> 
+        <h5 className='text-white'>{product.year}</h5> 
+        <h5 className='text-white'>{product.available ? "Available" : "Not Available"}</h5> 
 
       </Row>
 

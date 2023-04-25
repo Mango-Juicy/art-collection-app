@@ -7,15 +7,14 @@ import { Row, Col } from 'react-bootstrap'
 
 import StoryCard from './StoryCard';
 
-function Story() {
+function Story({idCategory}) {
 
   const dispatch = useDispatch()
   const productList = useSelector(state => state.productList)
   const { error, loading, products } = productList
   useEffect(() => {
-    dispatch(listProducts())
-
-  }, [])
+    dispatch(listProducts(idCategory))
+  }, [idCategory])
 
 
   return (

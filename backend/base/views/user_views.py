@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 
 from django.contrib.auth.models import User
-from base.serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
+from base.serializers import UserSerializer, UserSerializerWithToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -42,7 +42,6 @@ def getUserProfile(request):
 
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
-
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
