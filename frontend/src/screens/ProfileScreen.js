@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Link, redirect, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import { getUserDetails, updateUserProfile } from '../actions/userActions'
-import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
-import SecUserInfo from '../components/SecUserInfo'
+import Loader from '../components/main/Loader'
+import Message from '../components/main/Message'
+import { updateUserProfile } from '../actions/userActions'
+import FormUser from '../components/FormUser'
 
 function ProfileScreen() {
 
@@ -63,7 +62,7 @@ function ProfileScreen() {
                 {error && <Message variant='danger'>{error}</Message>}
                 {loading && <Loader />}
 
-                <SecUserInfo submitHandler={submitHandler} userInfo={userInfo}></SecUserInfo>
+                <FormUser submitHandler={submitHandler} userInfo={userInfo}></FormUser>
 
             </Col>
         </Row>

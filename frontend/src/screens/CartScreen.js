@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import { Card, Row, Col, Image, ListGroup, Button, Form, ListGroupItem } from 'react-bootstrap'
+import { useParams, useLocation } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addToCart, removeFromCart } from '../actions/cartActions';
-import { Message } from '../components/Message';
-import GalleryCard from '../components/GalleryCard';
+import CardImg from '../components/CardImg';
 
 export default function CartScreen() {
     const params = useParams();
@@ -34,7 +33,7 @@ export default function CartScreen() {
         <Row>
             <h1>Contact us</h1>
             <Col md={8}>                
-                <GalleryCard  product={cartItem.product} />  
+                <CardImg  product={cartItem.product} />  
             </Col>
             <Col md={4}>                
                 <p>Contact us to get all info about the {cartItem.product.name}</p>

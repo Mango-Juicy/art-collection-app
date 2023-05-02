@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams, useNavigate, createSearchParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Button, Form, ListGroupItem } from 'react-bootstrap'
-import { listProductDetails } from '../actions/productActions'
+import { Row, Col, Image, Button, div, Container } from 'react-bootstrap'
+import { getItemById } from '../actions/itemActions'
 
 
 function ItemScreen({ }) {
-  const [qty, setQty] = useState(1);
   const params = useParams();
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const productDetails = useSelector(state => state.productDetails);
-  const { product } = productDetails;
+  const itemDetails = useSelector(state => state.itemDetails);
+  const { item } = itemDetails;
 
   const colWMed = {span: 6, offset: 3}
   const colWFull = {span: 8, offset: 2}
 
 
   useEffect(() => {
-    dispatch(listProductDetails(`${params.id}`))
+    dispatch(getItemById(`${params.id}`))
   }, [dispatch])
 
 
@@ -28,36 +27,33 @@ function ItemScreen({ }) {
   })
 
   return (
-    <div>
-
-      <Row className='mb-4'>       
-        <h1 className='text-white'>{product.name}</h1>     
+    <Container>
+      <Row className=''>       
+        <h1 className='text-white'>{item.name}</h1>  
+        <hr className='m-0' style={{height: "2px", backgroundColor: "white"}} />
       </Row>
 
-      <Row>       
+      <Row className='my-4'>       
         <Col sm={colWFull} md={colWMed} lg={colWMed} xl={colWMed}>
-          <Image src={product.image} fluid/>
+          <Image src={item.image} fluid/>
         </Col>
       </Row>
 
-      <Row className='m-4'>      
-
-        <h5 className='text-white'>{product.description}</h5> 
-        <h5 className='text-white'>{product.year}</h5> 
-        <h5 className='text-white'>{product.available ? "Available" : "Not Available"}</h5> 
-
+      <Row className=''>    
+        <hr style={{height: "2px", backgroundColor: "white"}} />
+        <p className='text-white'>{item.description}</p> 
+        <p className='text-white'>{item.year}</p> 
+        <p className='text-white'>{item.available ? "Available" : "Not Available"}</p> 
       </Row>
 
       <Button 
         className='btn-block'
         onClick={() => addToCartEventHandler(`${params.id}`)}
         type='button' 
-        disabled={product.available === false}
+        disabled={item.available === false}
       >I'm interested
       </Button>
-       
-
-    </div>
+    </Container>
 
   )
 }

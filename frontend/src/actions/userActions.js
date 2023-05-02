@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect } from 'react'
-import { listProducts } from '../actions/productActions'
-import { PRODUCT_LIST_REQUEST } from '../constants/productConstants'
+import { listProducts } from './itemActions'
+import { PRODUCT_LIST_REQUEST } from '../constants/itemConstants'
 import {
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,

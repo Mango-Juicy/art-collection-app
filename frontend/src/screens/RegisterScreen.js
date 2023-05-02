@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { Link, redirect, useNavigate, useLocation } from 'react-router-dom'
-import { Form, Button, Row, Col, Container } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { Row, Col, Container } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import { listProducts } from '../actions/productActions'
-import { getUserDetails, register } from '../actions/userActions'
-import SecUserInfo from '../components/SecUserInfo'
+import Loader from '../components/main/Loader'
+import Message from '../components/main/Message'
+import { register } from '../actions/userActions'
+import FormUser from '../components/FormUser'
 
 
 function RegisterScreen() {
@@ -52,7 +51,7 @@ function RegisterScreen() {
 
                     {loading && <Loader />}
 
-                    <SecUserInfo submitHandler={submitHandler}></SecUserInfo>
+                    <FormUser submitHandler={submitHandler}></FormUser>
                     
                 </Col>
             </Row>

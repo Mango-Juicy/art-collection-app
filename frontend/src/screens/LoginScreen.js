@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Link, redirect, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Form, Button, Row, Col, Container } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
+import Loader from '../components/main/Loader'
+import Message from '../components/main/Message'
 import { login } from '../actions/userActions'
 
 function LoginScreen({ }) {

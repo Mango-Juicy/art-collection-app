@@ -1,63 +1,71 @@
+import React, { useEffect } from 'react';
+
 import { Container, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/main/Header';
+import Footer from './components/main/Footer';
 
 import HomeScreen from './screens/HomeScreen';
 import ItemScreen from './screens/ItemScreen';
 import CartScreen from './screens/CartScreen';
-import GalleryScreen from './screens/GalleryScreen';
-import StoriesScreen from './screens/StoriesScreen';
-import EventsScreen from './screens/EventsScreen';
+import MainScreen from './screens/MainScreen';
 
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import AddItemsScreen from './screens/AddItemsScreen';
+import ManageItemsScreen from './screens/ManageItemsScreen';
+
+import { getCategory } from './actions/itemActions';
 
 import { useDispatch, useSelector, } from 'react-redux'
 
 
 function App() {
 
+  const dispatch = useDispatch()
+
   const state = useSelector(state => state)
+  const categoryList = useSelector(state => state.categoryList)
+
+  const { error, loading, categories } = categoryList
+  
+
+  useEffect(() => {
+    dispatch(getCategory())
+  }, [])
+
   const printState = () =>{
     console.log(state)
   }
 
   return (
     <Router>
-      <Header />
+      <Header categories={categories}/>
       <main className="py-3">
         <Container>
           <Routes>
-            <Route path="/" element={<HomeScreen />} exact />
 
-            <Route path="/biografia" element={<StoriesScreen idCategory={1} />} exact />
-            <Route path="/antologiaCritica" element={<StoriesScreen idCategory={2} />} exact />
-            <Route path="/articoliInterviste" element={<StoriesScreen idCategory={3}/>} exact />
+          <Route path="/" element={<HomeScreen />} exact />
 
-            <Route path="/dipinti" element={<GalleryScreen idCategory={4} />} exact />
-            <Route path="/litografie" element={<GalleryScreen idCategory={5}/>} exact />
+            {categories.map((category) => (
+              <Route 
+                key={category.id} 
+                path={category.url} 
+                element={<MainScreen idCategory={category.id} />} 
+                exact 
+              />
+            ))}
 
-            <Route path="/mostreCollettive" element={<EventsScreen idCategory={6} />} exact />
-            <Route path="/mostrePersonali" element={<EventsScreen idCategory={7} />} exact />
-            <Route path="/cataloghi" element={<EventsScreen />} exact />
-
-            <Route path="/casaArte" element={<EventsScreen idCategory={8} />} exact />
-            <Route path="/archivio" element={<EventsScreen idCategory={9} />} exact />
-            <Route path="/autentiche" element={<EventsScreen idCategory={10} />} exact />
-
-            <Route path="/contatti" element={<StoriesScreen />} exact />
+            <Route path="/contatti" element={<MainScreen idCategory={1} />} exact />
 
             <Route path="/login/" element={<LoginScreen />} />
             
-            <Route path="/product/:id" element={<ItemScreen />} />
+            <Route path="/item/:id" element={<ItemScreen />} />
             <Route path="/cart/:id" element={<CartScreen />} />
             <Route path="/register/" element={<RegisterScreen />} />
             <Route path="/profile/" element={<ProfileScreen />} />
-            <Route path="/addItems/" element={<AddItemsScreen />} />
+            <Route path="/addItems/" element={<ManageItemsScreen />} />
           </Routes>
         </Container>        
       </main>

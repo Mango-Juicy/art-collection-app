@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@trendyol-js/react-carousel": "^3.0.0",
     "axios": "^1.2.0",
+    "bootstrap-icons": "^1.10.5",
     "d3": "^7.8.2",
     "d3-format": "^3.1.0",
     "http-proxy-middleware": "^2.0.6",
