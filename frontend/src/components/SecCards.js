@@ -28,7 +28,7 @@ function SecCards({idCategory}) {
 
   useEffect(() => {
     if (query.length > 2) {
-      dispatch(getItemsBySearch(query))
+      dispatch(getItemsBySearch(idCategory,query))
     }else{
       dispatch(getItemsByCategory(idCategory))
     }

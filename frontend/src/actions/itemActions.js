@@ -57,10 +57,10 @@ export const getItemById = (id) => async (dispatch) => {
     }
 }
 
-export const getItemsBySearch = (query) => async (dispatch) => {
+export const getItemsBySearch = (idCategory,query) => async (dispatch) => {
     try {
         dispatch({ type: ITEM_LIST_REQUEST })
-        const { data } = await axios.get(`/api/item/?query=${query}`)
+        const { data } = await axios.get(`/api/query/?query=${query}&idCategory=${idCategory}`)
 
         dispatch({
             type: ITEM_LIST_SUCCESS,
