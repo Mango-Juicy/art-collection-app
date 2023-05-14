@@ -12,10 +12,15 @@ import {
     CATEGORY_LIST_REQUEST,
     CATEGORY_LIST_SUCCESS,
     CATEGORY_LIST_FAIL,
+
+    CONFIG_LIST_REQUEST,
+    CONFIG_LIST_SUCCESS,
+    CONFIG_LIST_FAIL 
 } from '../constants/itemConstants'
 
 
-
+//ITEM
+//getItemsByFilters
 export const getItemsByCategory = (idCategory) => async (dispatch) => {
     try {
         dispatch({ type: ITEM_LIST_REQUEST })
@@ -36,14 +41,19 @@ export const getItemsByCategory = (idCategory) => async (dispatch) => {
     }
 }
 
+//getItemsByFilters
 export const getItemById = (id) => async (dispatch) => {
     try {
-        dispatch({ type: ITEM_DETAILS_REQUEST })
-        const { data } = await axios.get(`/api/item/?id=${id}`)
+        dispatch({ type: ITEM_LIST_REQUEST })
+        const params = { id: id }
+        const { data } = await axios.get(
+            `/api/item/`,
+            { params: params}
+        )
       
 
         dispatch({
-            type: ITEM_DETAILS_SUCCESS,
+            type: ITEM_LIST_SUCCESS,
             payload: data
         })
 
@@ -57,10 +67,14 @@ export const getItemById = (id) => async (dispatch) => {
     }
 }
 
-export const getItemsBySearch = (idCategory,query) => async (dispatch) => {
+//getItemsByQuery
+export const getItemsBySearch = (params) => async (dispatch) => {
     try {
         dispatch({ type: ITEM_LIST_REQUEST })
-        const { data } = await axios.get(`/api/query/?query=${query}&idCategory=${idCategory}`)
+        const { data } = await axios.get(
+            `/api/query/`,
+            { params: params }
+        )        
 
         dispatch({
             type: ITEM_LIST_SUCCESS,
@@ -77,7 +91,7 @@ export const getItemsBySearch = (idCategory,query) => async (dispatch) => {
     }
 }
 
-
+//getCategoryByFilters
 export const getCategory = () => async (dispatch) => {
     try {
         dispatch({ type: CATEGORY_LIST_REQUEST })
@@ -91,6 +105,27 @@ export const getCategory = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: CATEGORY_LIST_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+//getCategoryByFilters
+export const getConfiguration = () => async (dispatch) => {
+    try {
+        dispatch({ type: CONFIG_LIST_REQUEST })
+        const { data } = await axios.get(`/api/config/`)
+      
+        dispatch({
+            type: CONFIG_LIST_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CONFIG_LIST_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,

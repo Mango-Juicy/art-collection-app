@@ -41,3 +41,22 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Configuration(models.Model):
+    
+    setting = models.CharField(max_length=200, null=True, blank=True)
+    settingField = models.CharField(max_length=200, null=True, blank=True)
+    value = models.CharField(max_length=200, null=True, blank=True)
+    instruction = models.CharField(max_length=200, null=True, blank=True)
+
+    modifiedAt = models.DateTimeField(auto_now=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    modifiedBy =models.ForeignKey(settings.AUTH_USER_MODEL, related_name="configModifiedBy", null=True, blank=True, on_delete=models.SET_NULL)
+    createdBy = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="configCreatedBy", null=True, blank=True, on_delete=models.SET_NULL)
+    active = models.BooleanField(null=True, blank=True, default=True)
+
+    id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return self.settingField

@@ -3,6 +3,7 @@
 :root {
   --primary-color: #242424;
   --secondary-color: #2D2D2D;
+  --orange-color: #f90;
 }
 
 #root{ 
@@ -17,8 +18,11 @@
 p{
   white-space: pre-line;
 }
-
-
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 main{
   min-height: 80vh;
@@ -26,23 +30,35 @@ main{
 h3{
   padding: 1rem 0;
 }
+.btn-primary{
+  background-color: var(--orange-color) !important;
+}
+.btn-primary:hover{
+  background-color: rgb(255, 170, 43) !important;
+}
+
+.btn-outline-primary{
+  background-color: var(--primary-color) !important;
+}
+
 
 /* Colors */
-.c-black{
-  background-color: #000000;
-}
 .c-primary{
   background-color: var(--primary-color) !important;
 }
 .c-secondary{
   background-color: var(--secondary-color) !important;
 }
+.c-orange{
+  background-color: var(--orange-color) !important;
+}
+
+.c-black{
+  background-color: #000000;
+}
 .c-gray{
   background-color: red;
 }
 .c-gray-2{
   background-color: red;
-}
-.c-orange{
-  background-color: #f90 !important;
 }

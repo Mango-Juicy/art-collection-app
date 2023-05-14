@@ -17,7 +17,7 @@ function CardDetail({ product, addNewItem }) {
 }
 
   return (
-    <Card className="my-2 p-2 rounded border-1">
+    <Card className="my-2 border-0 c-primary text-white">
 
         <Row>
           <Card.Title as="div">

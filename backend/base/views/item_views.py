@@ -5,74 +5,79 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
-from base.models import Item, Category
-from base.serializers import ItemSerializer, CategorySerializer
+from base.models import *
+from base.serializers import *
 
-def getResponse(id,idCategory,query):
+
+#Logical Expressions
+def getQueryResponse(idCategory, yearFrom, yearTo, query):
     serializer=''
-   
-    if id:
-        items = Item.objects.get(id=int(id))
-        serializer = ItemSerializer(items, many=False)
-    if idCategory:
-        items = Item.objects.filter(idCategory=int(idCategory))
-        serializer = ItemSerializer(items, many=True)
-    if query:
-        items = Item.objects.filter(
-            Q(name__icontains=query) | 
-            Q(description__icontains=query)
-        )
-        serializer = ItemSerializer(items, many=True)
+
+    items = Item.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query),
+            idCategory__in=idCategory,
+            year__gte=int(yearFrom),
+            year__lte=int(yearTo)
+    )
+    serializer = ItemSerializer(items, many=True)
     
     if serializer:
         response = Response(serializer.data)
     else:
         response = Response({"error": "Bad Request"}, status=400)
-    
+
     return response
-        
 
 #ITEM
-# By Filters: implement all query here as item/?keyword=${keyword}
+# By Filters # !Avoid number='' # Implement all int query here
+# item/?id=${id}&idCategory=${idCategory}
+# item/ with any combination
+# !Avoid number=''
 @api_view(['GET'])
 def getItemsByFilters(request):
     
-    id = request.GET.get('id',0)
-    idCategory = request.GET.get('idCategory',0)
-    query = request.GET.get('query','')
+    #Get filters from request
+    params = {
+        "id": lambda value: { "id": value },
+        "idCategory": lambda value: { "idCategory": value }
+    }
+    filters = {}
 
+    for param, value in request.GET.items():
+        if params[param]:
+            filters.update(params[param](value))            
+
+    #Get Response
     try:
-        response = getResponse(id,idCategory,query)       
+        items = Item.objects.filter(**filters)
+        serializer = ItemSerializer(items, many=True)
+        response = Response(serializer.data)       
     except (Item.DoesNotExist):
         response = Response({"error": "Item does not exist"}, status=404)
 
     return response
 
+# By Query # !Avoid number=''
+# query/?idCategory=&yearFrom=&yearTo=&query= 
+# query/ with any combination
 @api_view(['GET'])
 def getItemsByQuery(request):
     
-    idCategory = request.GET.get('idCategory',0)
-    query = request.GET.get('query','')
+    #Get params from request
+    allCategory = Category.objects.values_list('id', flat = True)
+    idCategory = request.GET.get('idCategory', list(allCategory))
+    yearFrom = request.GET.get('yearFrom',0)
+    yearTo = request.GET.get('yearTo',9999)
+    query = request.GET.get('query','')    
 
-    serializer=''
-
+    #Get Response
     try:
-        items = Item.objects.filter(
-            Q(name__icontains=query) | 
-            Q(description__icontains=query),
-            idCategory=int(idCategory)
-        )
-        serializer = ItemSerializer(items, many=True)
-        
-        if serializer:
-            response = Response(serializer.data)
-        else:
-            response = Response({"error": "Bad Request"}, status=400)
-            
+        response = getQueryResponse(idCategory, yearFrom, yearTo, query)        
     except (Item.DoesNotExist):
         response = Response({"error": "Item does not exist"}, status=404)
 
     return response
+
 
 #CATEGORY 
 # By Filters: category/?id=${id} or category/ 
@@ -85,7 +90,7 @@ def getCategoryByFilters(request):
             category = Category.objects.get(id=int(id))
             serializer = CategorySerializer(category, many=False)
         else:
-            category = Category.objects
+            category = Category.objects.all()
             serializer = CategorySerializer(category, many=True)
         
         if serializer:
@@ -93,6 +98,20 @@ def getCategoryByFilters(request):
         else:
             response = Response({"error": "Bad Request"}, status=400)
 
+    except (Category.DoesNotExist):
+        response = Response({"error": "Item does not exist"}, status=404)
+
+    return response
+
+
+#CONFIGURATION 
+# All: config/
+@api_view(['GET'])
+def getConfiguration(request):    
+    try:
+        config = Configuration.objects.all()
+        serializer = ConfigurationSerializer(config, many=True)
+        response = Response(serializer.data)
     except (Category.DoesNotExist):
         response = Response({"error": "Item does not exist"}, status=404)
 

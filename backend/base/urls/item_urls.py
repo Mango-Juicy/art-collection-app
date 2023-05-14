@@ -17,4 +17,9 @@ urlpatterns = [
         views.getCategoryByFilters, 
         name='categoryByFilters'
         ),
+    
+    path('config/', 
+        views.getConfiguration, 
+        name='config'
+        ),
     ]

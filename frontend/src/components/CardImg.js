@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 function CardImg({ item }) {
   return (
-    <Card className="my-2 p-0 border-0 bg-transparent" >
+    <Card className="my-2 border-0 bg-transparent" >
       <Link to={`/item/${item.id}`}  style={{ textDecoration: 'none' }}>
         
         <Card.Img className="border-0 " src={item.image}   />   

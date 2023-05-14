@@ -10,12 +10,12 @@ function ItemScreen({ }) {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const itemDetails = useSelector(state => state.itemDetails);
-  const { item } = itemDetails;
+  const itemList = useSelector(state => state.itemList)
+  const { error, loading, items } = itemList
+  const item = items.at(0)
 
   const colWMed = {span: 6, offset: 3}
   const colWFull = {span: 8, offset: 2}
-
 
   useEffect(() => {
     dispatch(getItemById(`${params.id}`))
@@ -27,30 +27,30 @@ function ItemScreen({ }) {
   })
 
   return (
-    <Container>
+    <Container className='py-2'>
       <Row className=''>       
-        <h1 className='text-white'>{item.name}</h1>  
+        <h1 className='text-white'>{item?.name}</h1>  
         <hr className='m-0' style={{height: "2px", backgroundColor: "white"}} />
       </Row>
 
       <Row className='my-4'>       
         <Col sm={colWFull} md={colWMed} lg={colWMed} xl={colWMed}>
-          <Image src={item.image} fluid/>
+          <Image src={item?.image} fluid/>
         </Col>
       </Row>
 
       <Row className=''>    
         <hr style={{height: "2px", backgroundColor: "white"}} />
-        <p className='text-white'>{item.description}</p> 
-        <p className='text-white'>{item.year}</p> 
-        <p className='text-white'>{item.available ? "Available" : "Not Available"}</p> 
+        <p className='text-white'>{item?.description}</p> 
+        <p className='text-white'>{item?.year}</p> 
+        <p className='text-white'>{item?.available ? "Available" : "Not Available"}</p> 
       </Row>
 
       <Button 
-        className='btn-block'
+        className='btn-block c-orange'
         onClick={() => addToCartEventHandler(`${params.id}`)}
         type='button' 
-        disabled={item.available === false}
+        disabled={item?.available === false}
       >I'm interested
       </Button>
     </Container>

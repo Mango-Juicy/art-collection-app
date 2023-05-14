@@ -14,7 +14,7 @@ import MainScreen from './screens/MainScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import ManageItemsScreen from './screens/ManageItemsScreen';
+import ManagerScreen from './screens/ManagerScreen';
 
 import { getCategory } from './actions/itemActions';
 
@@ -42,11 +42,11 @@ function App() {
   return (
     <Router>
       <Header categories={categories}/>
-      <main className="py-3">
+      <main className="">
         <Container>
           <Routes>
 
-          <Route path="/" element={<HomeScreen />} exact />
+          <Route path="/" element={<HomeScreen categories={categories}/>} exact />
 
             {categories.map((category) => (
               <Route 
@@ -65,7 +65,7 @@ function App() {
             <Route path="/cart/:id" element={<CartScreen />} />
             <Route path="/register/" element={<RegisterScreen />} />
             <Route path="/profile/" element={<ProfileScreen />} />
-            <Route path="/addItems/" element={<ManageItemsScreen />} />
+            <Route path="/manager/" element={<ManagerScreen />} />
           </Routes>
         </Container>        
       </main>

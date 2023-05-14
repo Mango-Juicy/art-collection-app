@@ -10,7 +10,10 @@ function Header({categories}) {
   const { userInfo } = user
   const dispatch = useDispatch()
 
-  //Menu labels
+  //Configuration: title
+  const title = 'Romano Notari'
+
+  //Menu labels: returns unique elements
   const menu = [...new Set(categories.map((category) => category.menu))]  
 
   const logoutHandler = () => {
@@ -32,6 +35,7 @@ function Header({categories}) {
     )
   }
 
+
   //Accedi
   const userDropdown = () => {
     return(
@@ -44,7 +48,7 @@ function Header({categories}) {
 
           {
             !userInfo.is_staff ? <></>
-            : <LinkContainer to='/addItems'>
+            : <LinkContainer to='/manager'>
                 <NavDropdown.Item>Add Items</NavDropdown.Item>
               </LinkContainer>            
           }
@@ -54,7 +58,7 @@ function Header({categories}) {
         </NavDropdown>
       ) : (
         <LinkContainer className='m-1' to="/login">
-          <Nav.Link >Accedi</Nav.Link>
+          <Nav.Link>Accedi</Nav.Link>
         </LinkContainer>
       )
     )
@@ -67,7 +71,7 @@ function Header({categories}) {
           <Container>
 
             <LinkContainer to={'/'} >
-              <Navbar.Brand >Romano Notari</Navbar.Brand>
+              <Navbar.Brand >{title}</Navbar.Brand>
             </LinkContainer>
 
             <Navbar.Toggle className='border-0' aria-controls="basic-navbar-nav" />
