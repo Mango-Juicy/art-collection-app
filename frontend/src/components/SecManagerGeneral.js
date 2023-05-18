@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Row, Col, Button, Container } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
 
 import Loader from './main/Loader'
 import Message from './main/Message'
 
 import { getConfiguration } from '../actions/itemActions'
+import SecManagerInfo from './SecManagerInfo'
+import SecManagerAspect from './SecManagerAspect'
 
 
 function SecManagerGeneral() {
@@ -27,6 +27,17 @@ function SecManagerGeneral() {
         )
         return value
     }
+
+    // TODO: Export this function as global
+    const handleErrorLoading = (error, loading, section) => {
+        return(
+            error ? <Message variant='danger'>{error}</Message>
+            : (
+                loading ? <Loader/>
+                :   section
+            )
+        )
+    }
     
     useEffect(() => {
         dispatch(getConfiguration())
@@ -40,27 +51,25 @@ function SecManagerGeneral() {
         })
     }, [])
 
-    return (
-        <div className='text-white'>
-            {error && <Message variant='danger'>{error}</Message>}
-            {loading && <Loader />}
-            <div className='c-primary p-3 my-2'>
-                <h4 className='text-white'>Informazioni Generali</h4>
-                <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>
-                <p>Title: {configInfo.title}</p>
-                <p>Contatti email: {configInfo.email}</p>
-                <p>Contatti telefono: {configInfo.phone}</p>
+    // Safe content 
+    const content = () => {
+        return(
+            <div className='text-white'>
+
+                <SecManagerInfo configInfo={configInfo}></SecManagerInfo>
+
+                <SecManagerAspect configInfo={configInfo}></SecManagerAspect>
+
             </div>
-            
-            <div className='c-primary p-3 my-2'>
-                <h4 className='text-white'>Aspetto</h4>
-                <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>
-                <p>Colore Primario: {configInfo.colorPrimary}</p>
-                <p>Colore Secondario: {configInfo.colorSecondary}</p>
-                <p>Colore Accent: {configInfo.colorAccent}</p>
-                <p>Pulsanti Home Page: </p>
-            </div>
-        </div>
+        )
+    }
+
+    return (                  
+        handleErrorLoading(
+            error,
+            loading,
+            content()
+        )      
     )
 
 }
