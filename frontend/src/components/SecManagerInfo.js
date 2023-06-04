@@ -1,37 +1,79 @@
-import React from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Row, Col, Button, Modal } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { setConfiguration, getConfiguration } from '../actions/itemActions'
+import FormManagerInfo from './FormManagerInfo'
+
+const LBL_BTN_MODIFY = "Modifica"
+const LBL_BTN_CANCEL = "Annulla"
 
 
 function SecManagerInfo({configInfo}) {  
-    const colWIcon = {span: 3, offset: 0} 
-    const colWTitle = {span: 9, offset: 0} 
+    const dispatch = useDispatch()
+    const [showDialog, setShowDialog] = useState(false);
+    const handleClose = () => setShowDialog(false);
+    
+    // CONFIGURATION
+    const configList = useSelector(state => state.configList)
+    const { configs } = configList  
+
+    // TODO: Export this function as global
+    const idConfig = (settingField) => {
+        const id = configs
+            ?.filter(config => 
+              config.settingField === settingField)
+            .map(config => 
+              config.id
+        )
+        return id
+    }
+
+    // TODO: confirmation message
+    const handleUpdate = (e) => {
+        dispatch(getConfiguration()) 
+        setShowDialog(false)
+    }
+
+    const handleSubmit = (state,e) => {
+        e.preventDefault()           
+        
+        for (const [key, value] of Object.entries(state)) {
+            const data = {
+                id: idConfig(key),
+                value: value
+            }
+            dispatch(setConfiguration(data)) 
+        }
+        setShowDialog(true);        
+    }
 
     return (
-        <div className='c-primary p-3 my-2'>
-            <Row>
-                <Col sm={colWTitle} md={colWTitle} lg={colWTitle} xl={colWTitle}>
-                    <h4 className='text-white'>Informazioni Generali</h4>
-                </Col>
-                <Col sm={colWIcon} md={colWIcon} lg={colWIcon} xl={colWIcon}>
-                    <Button                     
-                        type='submit'
-                        variant="dark" 
-                        className='text-white c-orange w-100 py-1 fs-6' 
-                        id="button-addon2"
-                        ><i className="bi bi-pencil"></i> Modifica
+        <>
+            <FormManagerInfo 
+                state={configInfo} 
+                handleSubmit={handleSubmit}
+            >
+            </FormManagerInfo>
+
+            <Modal show={showDialog} onHide={handleClose}>
+
+                <Modal.Header closeButton>
+                    <Modal.Title>Applicazione Aggiornata</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <p>Le modifiche sono state salvate con successo. Cliccare su Aggiorna per vedere i risultati.</p>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleUpdate}>
+                        Aggiorna
                     </Button>
-                </Col>
-            </Row>
-            
-            <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>
+                </Modal.Footer>
 
-            <p>Title: {configInfo.title}</p>
-            <p>Contatti email: {configInfo.email}</p>
-            <p>Contatti telefono: {configInfo.phone}</p>
-
-        </div>
+            </Modal>
+        </>       
     )
-
 }
 
 export default SecManagerInfo

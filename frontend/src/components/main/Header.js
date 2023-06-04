@@ -4,14 +4,11 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../actions/userActions'
 
-function Header({categories}) {
+function Header({categories, title}) {
 
   const user = useSelector(state => state.user)
   const { userInfo } = user
   const dispatch = useDispatch()
-
-  //Configuration: title
-  const title = 'Romano Notari'
 
   //Menu labels: returns unique elements
   const menu = [...new Set(categories.map((category) => category.menu))]  

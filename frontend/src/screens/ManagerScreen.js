@@ -14,7 +14,7 @@ const TXT_BTN_LBL  = [
     "GESTISCI UTENTI"
 ]
 
-function ManagerScreen() {
+function ManagerScreen({configInfo}) {
 
     const colWSmall = {span: 3, offset: 0}
     const colWMed = {span: 9, offset: 0}
@@ -44,13 +44,13 @@ function ManagerScreen() {
     const secGroup = () => {
         switch (tab) {
             case 0:
-                return <SecManagerGeneral></SecManagerGeneral> 
+                return <SecManagerGeneral configInfo={configInfo}></SecManagerGeneral> 
             case 1:
                 return <SecManagerItems></SecManagerItems>   
             case 2:
                 return <SecManagerItems></SecManagerItems>                                             
             default:
-                return <SecManagerGeneral></SecManagerGeneral>
+                return <SecManagerGeneral configInfo={configInfo}></SecManagerGeneral>
         }
     }
 

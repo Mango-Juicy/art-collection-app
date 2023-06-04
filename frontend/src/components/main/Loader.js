@@ -2,7 +2,7 @@ import React from 'react'
 import { Spinner } from 'react-bootstrap'
 
 function Loader() {
-    return (
+    return (            
         <Spinner
             animation='border'
             role='status'
@@ -10,7 +10,7 @@ function Loader() {
                 height: '100px',
                 width: '100px',
                 margin: 'auto',
-                display: 'block'
+                display: 'block'                
             }}
         >
             <span className='sr-only'>Loading...</span>

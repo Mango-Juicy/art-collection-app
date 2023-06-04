@@ -22,4 +22,9 @@ urlpatterns = [
         views.getConfiguration, 
         name='config'
         ),
+    
+    path('setConfig/', 
+        views.setConfiguration, 
+        name='setConfig'
+        ),
     ]

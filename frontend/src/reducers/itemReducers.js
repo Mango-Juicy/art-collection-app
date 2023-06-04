@@ -59,35 +59,35 @@ export const itemDetailsReducer = (state = { item: { reviews: [] } }, action) =>
 export const categoryListReducer = (state = { categories: [] }, action) => {
     switch (action.type) {
         case CATEGORY_LIST_REQUEST:
-            return { loading: true, categories: [] }
+            return { loadingCategory: true, categories: [] }
 
         case CATEGORY_LIST_SUCCESS:
             return {
-                loading: false, 
+                loadingCategory: false, 
                 categories: action.payload,
             }
 
         case CATEGORY_LIST_FAIL:
-            return { loading: false, error: action.payload }
+            return { loadingCategory: false, errorCategory: action.payload }
 
         default:
             return state
     }
 }
 
-export const configListReducer = (state = { config: [] }, action) => {
+export const configListReducer = (state = { configs: [] }, action) => {
     switch (action.type) {
         case CONFIG_LIST_REQUEST:
-            return { loading: true, config: [] }
+            return { loadingConfig: true, configs: [] }
 
         case CONFIG_LIST_SUCCESS:
             return {
-                loading: false, 
-                config: action.payload,
+                loadingConfig: false, 
+                configs: action.payload,
             }
 
         case CONFIG_LIST_FAIL:
-            return { loading: false, error: action.payload }
+            return { loadingConfig: false, errorConfig: action.payload }
 
         default:
             return state

@@ -51,14 +51,6 @@ function CardDetail({ product, addNewItem }) {
           </Col>
         </Row>
 
-        <Row>
-          <Button 
-            type='submit' 
-            variant='primary'
-            onClick={(e) => addItem(e)}
-          >Edit
-          </Button>
-        </Row>
     </Card>
   )
 }

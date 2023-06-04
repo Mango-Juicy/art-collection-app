@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from base.models import *
 from base.serializers import *
-
+import json
 
 #Logical Expressions
 def getQueryResponse(idCategory, yearFrom, yearTo, query):
@@ -114,5 +114,35 @@ def getConfiguration(request):
         response = Response(serializer.data)
     except (Category.DoesNotExist):
         response = Response({"error": "Item does not exist"}, status=404)
+
+    return response
+
+@api_view(['POST'])
+def setConfiguration(request):  
+
+    #Get filters from request
+    params = {
+        "id": lambda value: { "id": value },
+        "setting": lambda value: { "setting": value },
+        "settingField": lambda value: { "settingField": value },
+        "value": lambda value: { "value" : value }
+    }
+    fields = {}
+    data = json.loads(request.body)
+
+    for param, value in data.items():
+        if params[param]:
+            fields.update(params[param](value)) 
+    idConfig = fields.pop("id", None)
+
+    try:
+        config = Configuration.objects.get(id=int(idConfig[0]))
+        for key, value in fields.items():
+            setattr(config, key, value)
+        config.save()
+
+        response = Response({'success': 'true'})
+    except (Configuration.DoesNotExist):
+        response = Response({"success": "false"})
 
     return response

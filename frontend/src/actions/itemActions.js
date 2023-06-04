@@ -15,7 +15,11 @@ import {
 
     CONFIG_LIST_REQUEST,
     CONFIG_LIST_SUCCESS,
-    CONFIG_LIST_FAIL 
+    CONFIG_LIST_FAIL,
+
+    CONFIG_UPDATE_REQUEST,
+    CONFIG_UPDATE_SUCCESS,
+    CONFIG_UPDATE_FAIL
 } from '../constants/itemConstants'
 
 
@@ -117,6 +121,7 @@ export const getConfiguration = () => async (dispatch) => {
     try {
         dispatch({ type: CONFIG_LIST_REQUEST })
         const { data } = await axios.get(`/api/config/`)
+
       
         dispatch({
             type: CONFIG_LIST_SUCCESS,
@@ -126,6 +131,30 @@ export const getConfiguration = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: CONFIG_LIST_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+//getCategoryByFilters
+export const setConfiguration = (params) => async (dispatch) => {
+    try {
+        dispatch({ type: CONFIG_UPDATE_REQUEST })
+        const { data } = await axios.post(
+            `/api/setConfig/`,
+            params 
+        )
+
+        dispatch({
+            type: CONFIG_UPDATE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CONFIG_UPDATE_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
