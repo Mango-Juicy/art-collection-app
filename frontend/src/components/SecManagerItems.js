@@ -17,22 +17,15 @@ function SecManagerItems() {
 
     const dispatch = useDispatch()
     
-    const [addNewItem, setAddNewItem] = useState(false);
+    const [showDialog, setShowDialog] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState({})
 
     const itemList = useSelector(state => state.itemList)
-    const { error, loading, items } = itemList
-
-    const [showDialog, setShowDialog] = useState(false);
-    const handleClose = () => setShowDialog(false);
+    const { error, loading, items } = itemList    
 
     useEffect(() => {
         dispatch(getItemById())
     }, [])
-
-    const addItem = (e) =>{
-        e.preventDefault()
-        setShowDialog(true)        
-    }
 
     const searchHandler = (state,e) => {
         e.preventDefault()
@@ -55,11 +48,22 @@ function SecManagerItems() {
         }
     }
 
-    const handleUpdate = (e) => {
+    const handleEdit = (item) => {
+        setItemToEdit(item)
+        setShowDialog(true)
+        console.log(item)
+    }
+
+    const handleCancel = (e) => {
         setShowDialog(false)
     }
 
-      // TODO: Export this function as global
+    const handleSubmit = (state,e) => {
+        setShowDialog(false)
+        // addNewItem action
+    }
+
+    // TODO: Export this function as global
     const handleErrorLoading = (error, loading, content) => {
         return(
             error ? <Message variant='danger'>{error}</Message>
@@ -85,7 +89,7 @@ function SecManagerItems() {
                                 variant="dark" 
                                 className='text-white c-orange py-1 fs-6 m-0' 
                                 id="button-2"   
-                                onClick={(e) => addItem(e)}                                 
+                                onClick={() => setShowDialog(true)}                                 
                                 >Aggiungi
                             </Button>                                                     
                         </Col>
@@ -127,7 +131,8 @@ function SecManagerItems() {
                                     <Button      
                                         variant="dark" 
                                         className='text-white c-secondary py-1 fs-6' 
-                                        id="button-2"                                    
+                                        id="button-2"   
+                                        onClick={() => handleEdit(item)}                                 
                                         >Modifica
                                     </Button>                                                         
                             </Col>                                              
@@ -137,26 +142,15 @@ function SecManagerItems() {
                     }  
                 </div>
 
-                <Modal size="lg" show={showDialog} onHide={handleClose}>
-                    <div className='c-primary text-white'>
-                        
-                        <Modal.Header closeButton>
-                            <Modal.Title className='text-white'>Aggiungi Item</Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body>
-                            <FormItem state=""></FormItem>
-                        </Modal.Body>
-
-                        <Modal.Footer>
-                            <Button variant="primary" onClick={handleUpdate}>
-                                Annulla
-                            </Button>
-                            <Button variant="primary" onClick={handleUpdate}>
-                                Salva
-                            </Button>
-                        </Modal.Footer>
-                    </div>
+                <Modal size="lg" show={showDialog} onHide={handleCancel}>
+                    <div className='c-primary'>
+                        <FormItem 
+                            state={itemToEdit}
+                            handleSubmit={handleSubmit} 
+                            handleCancel={handleCancel}
+                        >
+                        </FormItem>
+                    </div>  
                 </Modal>
             </>
         )
