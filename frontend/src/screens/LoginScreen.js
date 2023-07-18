@@ -4,7 +4,7 @@ import { Form, Button, Row, Col, Container } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
 import Loader from '../components/main/Loader'
 import Message from '../components/main/Message'
-import { login } from '../actions/userActions'
+import { getUserToken, getUserProfile } from '../actions/userActions'
 
 function LoginScreen({ }) {
     const [username, setUsername] = useState('')
@@ -15,23 +15,22 @@ function LoginScreen({ }) {
     const location = useLocation()
     const redirect = location.state ? Number(location.state) : '/'
 
-    const user = useSelector(state => state.user)
-    const { error, loading, userInfo } = user
+    const userAuth = useSelector(state => state.userAuth)
+    const { error, loading, userToken } = userAuth
 
     //const redirect = location.search ? location.search.split('=')[1] : '/'
 
     useEffect(() => {
-        if (userInfo) {
-            navigate(redirect)
+        if (userToken) {       
+            dispatch(getUserProfile(userToken))   
+            navigate(redirect)            
         }
-    }, [navigate, userInfo, redirect])
-
+    }, [userToken])
    
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(login(username, password))
-        navigate(redirect)
+        dispatch(getUserToken(username, password))
     }
 
     return (

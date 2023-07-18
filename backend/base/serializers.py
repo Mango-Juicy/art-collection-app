@@ -27,13 +27,13 @@ class ConfigurationSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
 
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'token']
+        fields = ['id', 'token']
 
     def get_token(self, obj):      
         token = RefreshToken.for_user(obj)

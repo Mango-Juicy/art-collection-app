@@ -13,6 +13,11 @@ urlpatterns = [
         name='itemByQuery'
     ),
 
+    path('setItem/', 
+        views.setItem, 
+        name='setItem'
+        ),
+
     path('category/', 
         views.getCategoryByFilters, 
         name='categoryByFilters'

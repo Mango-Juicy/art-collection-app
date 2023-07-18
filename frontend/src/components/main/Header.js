@@ -37,7 +37,7 @@ function Header({categories, title}) {
   const userDropdown = () => {
     return(
       userInfo ? (
-        <NavDropdown className='m-1' menuVariant='dark' title={userInfo.first_name} id='username'>
+        <NavDropdown className='m-1' align="end" menuVariant='dark' title={userInfo.first_name} id='username'>
 
           <LinkContainer to='/profile'>
             <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -46,7 +46,7 @@ function Header({categories, title}) {
           {
             !userInfo.is_staff ? <></>
             : <LinkContainer to='/manager'>
-                <NavDropdown.Item>Add Items</NavDropdown.Item>
+                <NavDropdown.Item>App Manager</NavDropdown.Item>
               </LinkContainer>            
           }
 

@@ -28,7 +28,7 @@ render() {
         <>
           <Col > 
             <Form.Control
-              className='c-secondary text-white border border-primary py-2'
+              className='c-secondary text-white border border-primary py-0'
               type='number'
               placeholder='Da..'
               aria-describedby="basic-addon2"
@@ -40,7 +40,7 @@ render() {
         
           <Col >   
             <Form.Control
-              className='c-secondary text-white border border-primary py-2'
+              className='c-secondary text-white border border-primary py-0'
               type='number'
               placeholder='A..'
               aria-describedby="basic-addon2"
@@ -60,7 +60,7 @@ render() {
           {/* SEARCH BAR */}
           <Col className='my-2' sm={{span: 12, offset: 0}} md={colFilterMed} lg={colFilterMed} xl={colFilterMed}> 
             <Form.Control
-              className='c-secondary text-white border border-primary py-2'
+              className='c-secondary text-white border border-primary py-0 '
               type='text'
               placeholder='Cerca..'
               aria-describedby="basic-addon2"
@@ -80,7 +80,7 @@ render() {
                 <Button 
                   type='submit'
                   variant="dark" 
-                  className='text-white c-orange w-100 py-2' 
+                  className='text-white c-orange w-100 py-0' 
                   id="button-addon2"
                 ><i className="bi bi-search"></i>
                 </Button>

@@ -8,7 +8,7 @@ import Message from './main/Message'
 import CardDetail from './CardDetail'
 import FormItem from './FormItem'
 
-import { getItemById, getItemsBySearch } from '../actions/itemActions'
+import { getItemById, getItemsBySearch, setItem } from '../actions/itemActions'
 import SecFilters from './SecFilters'
 
 const TXT_BTN_ADD  = "Add New Item"
@@ -20,8 +20,12 @@ function SecManagerItems() {
     const [showDialog, setShowDialog] = useState(false);
     const [itemToEdit, setItemToEdit] = useState({})
 
+    const user = useSelector(state => state.user)
+    const { userInfo } = user 
     const itemList = useSelector(state => state.itemList)
     const { error, loading, items } = itemList    
+    const categoryList = useSelector(state => state.categoryList)
+    const { categories } = categoryList 
 
     useEffect(() => {
         dispatch(getItemById())
@@ -60,7 +64,26 @@ function SecManagerItems() {
 
     const handleSubmit = (state,e) => {
         setShowDialog(false)
-        // addNewItem action
+
+        const formData = new FormData();
+        formData.append('id', state.id);
+        formData.append('description', state.description);
+        formData.append('name', state.name);
+        formData.append('image', state.image);
+        formData.append('brand', state.brand);
+        formData.append('idCategory', state.idCategory);
+        formData.append('tag', state.tag);
+        formData.append('price', state.price);
+        formData.append('year', state.year);
+        formData.append('available', state.available);
+
+        dispatch(setItem(formData, userInfo.access))
+        dispatch(getItemById())
+    }
+
+    const handleAdd = () => {
+        setShowDialog(true)
+        setItemToEdit("")        
     }
 
     // TODO: Export this function as global
@@ -89,7 +112,7 @@ function SecManagerItems() {
                                 variant="dark" 
                                 className='text-white c-orange py-1 fs-6 m-0' 
                                 id="button-2"   
-                                onClick={() => setShowDialog(true)}                                 
+                                onClick={() => handleAdd()}                                 
                                 >Aggiungi
                             </Button>                                                     
                         </Col>
@@ -118,25 +141,25 @@ function SecManagerItems() {
                     {                
                         items.map((item) => (       
                             <Row className='m-1 text-white' key={item.id} >                    
-                            <Col className='p-0' sm={4} md={4} lg={4} xl={4}>
-                                    <p className='m-2'>{item.name.slice(0,50)}</p>                                                       
-                            </Col>  
-                            <Col className='p-0' sm={5} md={5} lg={5} xl={5}>
-                                    <p className='m-2'>{item.description.slice(0,50) + "..."}</p>                                                       
-                            </Col>  
-                            <Col className='p-0' sm={1} md={1} lg={1} xl={1}>
-                                    <p className='m-2'>{item.year}</p>                                                       
-                            </Col>      
-                            <Col className='p-0 text-end' sm={2} md={2} lg={2} xl={2}>
-                                    <Button      
-                                        variant="dark" 
-                                        className='text-white c-secondary py-1 fs-6' 
-                                        id="button-2"   
-                                        onClick={() => handleEdit(item)}                                 
-                                        >Modifica
-                                    </Button>                                                         
-                            </Col>                                              
-                            <hr className='my-2' style={{height: "1px"}}/>
+                                <Col className='p-0' sm={4} md={4} lg={4} xl={4}>
+                                        <p className='m-2'>{item.name.slice(0,50)}</p>                                                       
+                                </Col>  
+                                <Col className='p-0' sm={5} md={5} lg={5} xl={5}>
+                                        <p className='m-2'>{item.description.slice(0,50) + "..."}</p>                                                       
+                                </Col>  
+                                <Col className='p-0' sm={1} md={1} lg={1} xl={1}>
+                                        <p className='m-2'>{item.year}</p>                                                       
+                                </Col>      
+                                <Col className='p-0 text-end' sm={2} md={2} lg={2} xl={2}>
+                                        <Button      
+                                            variant="dark" 
+                                            className='text-white c-secondary py-1 fs-6' 
+                                            id="button-2"   
+                                            onClick={() => handleEdit(item)}                                 
+                                            >Modifica
+                                        </Button>                                                         
+                                </Col>                                              
+                                <hr className='my-2' style={{height: "1px"}}/>
                             </Row>
                         ))
                     }  
@@ -146,7 +169,8 @@ function SecManagerItems() {
                     <div className='c-primary'>
                         <FormItem 
                             state={itemToEdit}
-                            handleSubmit={handleSubmit} 
+                            categories={categories}
+                            handleSubmit={handleSubmit}
                             handleCancel={handleCancel}
                         >
                         </FormItem>

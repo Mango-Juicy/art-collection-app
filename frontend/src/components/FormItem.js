@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Button, Row, Col, Card, FloatingLabel } from 'react-bootstrap'
 
 const LBL_BTN_MODIFY = "Modifica"
 const LBL_BTN_CANCEL = "Annulla"
@@ -9,148 +9,158 @@ class FormItem extends React.Component {
 
     constructor(props) {
         super(props);
-        if (this.props.state === "" ){
-            this.state = {
-                name: "",
-                description:  "",
-                brand:  "",
-                image: "",
-                category:  "",
-                tag:  "",
-                price: "",
-                year: "",
-            }
-        }else { this.state = this.props.state}
+        const isStateNull = this.props.state === "" ? true : false
+        this.state = {
+            id:  isStateNull ? "" : this.props.state.id,
+            name: isStateNull ? "" : this.props.state.name,
+            description:  isStateNull ? "" : this.props.state.description,
+            brand: isStateNull ? "" : this.props.state.brand,
+            image: isStateNull ? "" : this.props.state.image,
+            localImage: null,
+            idCategory: isStateNull ? "" : this.props.state.idCategory,
+            tag: isStateNull ? "" : this.props.state.tag,
+            price: isStateNull ? "" : this.props.state.price,
+            year: isStateNull ? "" : this.props.state.year,
+            available: "True"
+        }           
+
         
     }
 
     render() {             
         const colWSmall = {span: 4, offset: 0}
+        const colWMed = {span: 6, offset: 0}
         const colWFull = {span: 12, offset: 0}
 
         const itemForm = () => {
             return(
-                <Form onSubmit={(e) => this.props.submitHandler(this.state,e)}>
+                <Form >
                     <Row>
-                        <Col>
+                        <Col sm={colWFull} md={colWMed} lg={colWMed} xl={colWMed}>
                             {
-                                this.state.image === "" ?
-                                    <Form.Group className='my-2 mx-0' as={Row} controlId='image'>
-                                        <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Image</Form.Label>
-                                        <Col>
-                                            <Form.Control
-                                                required
-                                                type='file'
-                                                accept='image/*'
-                                                placeholder='Enter image'
-                                                value={this.state.image}
-                                                onChange={(e) => this.setState({ image: e.target.value })}
-                                            >
-                                            </Form.Control>
-                                        </Col>
-                                    </Form.Group>
-                                : <></>
+                                this.state.localImage === null ? (
+                                    this.state.image === null ? <></>
+                                    : <Card.Img className="border-0" src={this.state.image} />
+                                ) : <Card.Img className="border-0" src={this.state.localImage} />
                             }
+                            <Form.Group className='my-2 mx-0' as={Row} controlId='image'>
+                                    <Form.Control
+                                        required
+                                        type='file'
+                                        id='uploadImage'                                        
+                                        accept='image/*'
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            this.setState({ image: file });
+                                            const reader = new FileReader();
+                                            reader.onload = () => {
+                                                this.setState({ localImage: reader.result });
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }}
+                                    />
+                            </Form.Group>
+                        </Col>
 
-                            <Form.Group className='my-2 mx-0' as={Row} controlId='name'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Name</Form.Label>                    
-                                <Col>   
+                        <Col sm={colWFull} md={colWMed} lg={colWMed} xl={colWMed} >
+                            
+                            <Form.Group className='mb-2 mx-0' as={Row} controlId='name'>
+                                <FloatingLabel className='p-0' label="Name" controlId="name">
                                     <Form.Control                         
                                         required
-                                        type='Name'
+                                        type='text'
                                         placeholder='Enter name'
                                         value={this.state.name}
                                         onChange={(e) => this.setState({ name: e.target.value })}
                                     >
                                     </Form.Control>
-                                </Col>
+                                </FloatingLabel>                     
                             </Form.Group>
 
-                            <Form.Group className='my-2 mx-0' as={Row} controlId='description'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall} >Description</Form.Label>
-                                <Col> 
+                            <Form.Group className='my-2 mx-0' as={Row} controlId='year'>
+                                <FloatingLabel className='p-0' label="Year" controlId="year">
                                     <Form.Control
                                         required
-                                        type='Name'
-                                        placeholder='Enter description'
-                                        value={this.state.description}
-                                        onChange={(e) => this.setState({ description: e.target.value })}
-                                    >
+                                        type='number'
+                                        placeholder='Enter year'
+                                        value={this.state.year}
+                                        onChange={(e) => this.setState({ year: e.target.value })}>
                                     </Form.Control>
-                                </Col>
+                                </FloatingLabel>
                             </Form.Group>
-                        </Col>     
 
-                        <Col>
                             <Form.Group className='my-2 mx-0' as={Row} controlId='brand'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Brand</Form.Label>
-                                <Col>
+                                <FloatingLabel className='p-0' label="Brand" controlId="brand">                                
                                     <Form.Control
                                         required
-                                        type='Name'
+                                        type='text'
                                         placeholder='Enter brand'
                                         value={this.state.brand}
                                         onChange={(e) => this.setState({ brand: e.target.value })}
                                     >
                                     </Form.Control>
-                                </Col>
+                                </FloatingLabel>
                             </Form.Group>                        
 
-                            <Form.Group className='my-2 mx-0' as={Row} controlId='category'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Catergory</Form.Label>
-                                <Col>
-                                    <Form.Control
-                                        required
-                                        type='name'
-                                        placeholder='Enter category'
-                                        value={this.state.category}
-                                        onChange={(e) => this.setState({ category: e.target.value })}
+                            <Form.Group className='my-2 mx-0' as={Row} controlId='idCategory'>
+                                <FloatingLabel className='p-0' label="Category" controlId="category">
+                                    <Form.Select 
+                                        value={this.state.idCategory} 
+                                        id="idCategory"
+                                        onChange={(e) => this.setState({ idCategory: e.target.value })}
                                     >
-                                    </Form.Control>
-                                </Col>
+                                        <option value={null}>Select Category</option>
+                                        {this.props.categories.map((category) => ( 
+                                          <option key={category.id} value={category.id}>{category.label}</option>                                      
+                                                             
+                                        ))}                                      
+                                    </Form.Select>
+                                </FloatingLabel>
                             </Form.Group>
 
                             <Form.Group className='my-2 mx-0' as={Row} controlId='tag'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Tag</Form.Label>
-                                <Col>
+                                <FloatingLabel className='p-0' label="Tag" controlId="tag">
                                     <Form.Control
                                         required
-                                        type='name'
+                                        type='text'
                                         placeholder='Confirm tag'
                                         value={this.state.tag}
-                                        onChange={(e) => this.setState({ tag: e.target.value })}                    >
+                                        onChange={(e) => this.setState({ tag: e.target.value })}>
                                     </Form.Control>
-                                </Col>                    
+                                </FloatingLabel>                    
                             </Form.Group>
 
                             <Form.Group className='my-2 mx-0' as={Row} controlId='price'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Price</Form.Label>
-                                <Col>
+                                <FloatingLabel className='p-0' label="Price" controlId="price">
                                     <Form.Control
-                                        className='rounded'
                                         required
-                                        type='name'
+                                        type='number'
                                         placeholder='Enter price'
-                                        value={this.state.tag}
-                                        onChange={(e) => this.setState({ price: e.target.value })}                    >
+                                        value={this.state.price}
+                                        onChange={(e) => this.setState({ price: e.target.value })}>
                                     </Form.Control>
-                                </Col>
-                            </Form.Group>
-
-                            <Form.Group className='my-2 mx-0' as={Row} controlId='year'>
-                                <Form.Label column sm={colWFull} md={colWSmall} lg={colWSmall} xl={colWSmall}>Year</Form.Label>
-                                <Col>
-                                    <Form.Control
-                                        required
-                                        type='name'
-                                        placeholder='Enter year'
-                                        value={this.state.tag}
-                                        onChange={(e) => this.setState({ year: e.target.value })}                    >
-                                    </Form.Control>
-                                </Col>
+                                </FloatingLabel>
                             </Form.Group>
                         </Col>          
-                    </Row>                                       
+                    </Row>       
+                    <Row>                       
+                        <Col>
+                            <hr className='my-3' style={{height: "2px", backgroundColor: "white"}}/>
+                            <Form.Group className='my-2 mx-0' as={Row} controlId='description'>
+                                <FloatingLabel className='p-0' label="Description" controlId="description"> 
+                                    <Form.Control
+                                        required
+                                        as="textarea"
+                                        type='text'
+                                        style={{height: "100px"}}
+                                        value={this.state.description}
+                                        onChange={(e) => this.setState({ description: e.target.value })}
+                                    >
+                                    </Form.Control>
+                                </FloatingLabel>
+                            </Form.Group>
+                        </Col>
+                    </Row>                                
                 </Form>
             );
         }
@@ -159,7 +169,7 @@ class FormItem extends React.Component {
             <div className='c-primary p-3 my-2'>
                 <h4 className='text-white'>Aggiungi Item</h4>
                 
-                <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>
+                <hr className='mb-3 mt-2' style={{height: "2px", backgroundColor: "white"}}/>
 
                 {itemForm()}     
                     

@@ -20,6 +20,7 @@ import ManagerScreen from './screens/ManagerScreen';
 import { getCategory, getConfiguration } from './actions/itemActions';
 
 import { useDispatch, useSelector, } from 'react-redux'
+import { getUserProfile } from './actions/userActions';
 
 
 function App() {
@@ -31,6 +32,10 @@ function App() {
   }
   
   const dispatch = useDispatch()
+
+  // USER
+  const user = useSelector(state => state.user)
+  const { userInfo } = user
 
   // CATEGORY
   const categoryList = useSelector(state => state.categoryList)
@@ -75,7 +80,6 @@ function App() {
       colorSecondary: handleConfig("colorPalette","colorSecondary"),
       colorAccent: handleConfig("colorPalette","colorAccent")
     })  
-    console.log(configInfo)
   }, [configs])
 
   // rootVariables
@@ -109,8 +113,18 @@ function App() {
               <Route path="/item/:id" element={<ItemScreen />} />
               <Route path="/cart/:id" element={<CartScreen />} />
               <Route path="/register/" element={<RegisterScreen />} />
-              <Route path="/profile/" element={<ProfileScreen />} />
-              <Route path="/manager/" element={<ManagerScreen configInfo={configInfo}/>} />
+              
+              {/* USER ONLY */}
+              <Route path="/profile/" element={<ProfileScreen userInfo={userInfo} />} />
+              
+              {/* STAFF ONLY */}
+              {
+                userInfo === null ? <></> 
+                : userInfo.is_staff ? <Route path="/manager/" element={<ManagerScreen configInfo={configInfo}/>} />
+                : <></>
+              }
+              
+
             </Routes>
           </Container>        
         </main>

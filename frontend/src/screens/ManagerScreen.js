@@ -7,6 +7,7 @@ import SecManagerItems from '../components/SecManagerItems'
 
 import { getItemById } from '../actions/itemActions'
 import SecManagerGeneral from '../components/SecManagerGeneral'
+import SecManagerUsers from '../components/SecManagerUsers'
 
 const TXT_BTN_LBL  = [
     "GENERALE", 
@@ -48,7 +49,7 @@ function ManagerScreen({configInfo}) {
             case 1:
                 return <SecManagerItems></SecManagerItems>   
             case 2:
-                return <SecManagerItems></SecManagerItems>                                             
+                return <SecManagerUsers></SecManagerUsers>                                             
             default:
                 return <SecManagerGeneral configInfo={configInfo}></SecManagerGeneral>
         }

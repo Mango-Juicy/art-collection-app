@@ -41,9 +41,9 @@ function MainScreen({idCategory}) {
 
   return (
     <>
-      <hr style={{height: "2px", backgroundColor: "white"}}/>
+      <hr className='my-1' style={{height: "2px", backgroundColor: "white"}}/>
       <SecFilters submitHandler={searchHandler}></SecFilters>      
-      <hr className='my-3' style={{height: "2px", backgroundColor: "white"}}/>
+      <hr className='my-1' style={{height: "2px", backgroundColor: "white"}}/>
       <SecCards items={items} idCategory={idCategory}></SecCards>
     </>
   )

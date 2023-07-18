@@ -14,31 +14,31 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 
+import pprint as pp
 
 
-
+#Returns UserToken: {id, token, access, refresh}
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
    
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
 
+       
         for k, v in serializer.items():
             data[k] = v 
         
         return data        
 
-
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-# Create your views here.
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
-    user = request.user
+    idUser = request.GET.get('id')
+    user = User.objects.get(id=int(idUser))
 
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
@@ -46,6 +46,41 @@ def getUserProfile(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateUserProfile(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+
+    data = request.data
+    user.username = data['username']
+    user.first_name = data['first_name']    
+    user.last_name = data['last_name']    
+    user.email = data['email']
+
+    if data['password'] != '':
+        user.password = make_password(data['password'])
+
+    user.save()
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    user = User.objects.create(
+        username=data['username'],
+        password=make_password(data['password']),
+        first_name=data['first_name'],
+        last_name=data['last_name'],        
+        email=data['email']        
+        )
+
+    serializer = UserSerializerWithToken(user, many=False)
+    return Response(serializer.data)
+
+
+
+# USERS MANAGER
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def setUser(request):
     user = request.user
     serializer = UserSerializerWithToken(user, many=False)
 
@@ -61,25 +96,12 @@ def updateUserProfile(request):
     user.save()
     return Response(serializer.data)
 
+# USERS MANAGER
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getUsers(request):
+def getUser(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-def registerUser(request):
-    data = request.data
-    user = User.objects.create(
-        username=data['username'],
-        password=make_password(data['password']),
-        first_name=data['first_name'],
-        last_name=data['last_name'],        
-        email=data['email']        
-        )
-
-    serializer = UserSerializerWithToken(user, many=False)
     return Response(serializer.data)
 
 

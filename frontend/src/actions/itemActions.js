@@ -23,7 +23,6 @@ import {
 } from '../constants/itemConstants'
 
 
-//ITEM
 //getItemsByFilters
 export const getItemsByCategory = (idCategory) => async (dispatch) => {
     try {
@@ -88,6 +87,42 @@ export const getItemsBySearch = (params) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: ITEM_LIST_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+//setItem
+export const setItem = (formData, access) => async (dispatch) => {
+    try {
+        dispatch({ 
+            type: CONFIG_UPDATE_REQUEST 
+        })
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${access}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `/api/setItem/`,
+            formData,
+            config
+        )
+        console.log(data)
+
+        dispatch({
+            type: CONFIG_UPDATE_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: CONFIG_UPDATE_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,

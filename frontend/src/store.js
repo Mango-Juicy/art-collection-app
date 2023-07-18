@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // Reducers
 import { itemListReducer, itemDetailsReducer, categoryListReducer, configListReducer} from './reducers/itemReducers';
 import { cartReducer } from './reducers/cartReducers';
-import { UserReducer } from './reducers/userReducers';
+import { UserReducer, UserAuthReducer, UserListReducer } from './reducers/userReducers';
 
 
 
@@ -18,20 +18,22 @@ const reducer = combineReducers({
 
     configList: configListReducer,
 
-    cart: cartReducer,
-    
-    user: UserReducer
-})
+    user: UserReducer,
+    userAuth: UserAuthReducer,
+    userList: UserListReducer,
 
-const cartItemFromStorage = localStorage.getItem('cartItem') ?
-    JSON.parse(localStorage.getItem('cartItem')) : ""
+    cart: cartReducer    
+})
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ?
     JSON.parse(localStorage.getItem('userInfo')) : null
 
+const userTokenFromStorage = localStorage.getItem('userToken') ?
+    JSON.parse(localStorage.getItem('userToken')) : null
+
 const initialState = {
-    cart: { cartItem: cartItemFromStorage },
-    user: { userInfo: userInfoFromStorage }
+    user: { userInfo: userInfoFromStorage },
+    userAuth: { userToken: userTokenFromStorage }
 }
 
 const middleware = [thunk]

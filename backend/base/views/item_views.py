@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from base.models import *
@@ -29,10 +30,12 @@ def getQueryResponse(idCategory, yearFrom, yearTo, query):
     return response
 
 #ITEM
-# By Filters # !Avoid number='' # Implement all int query here
-# item/?id=${id}&idCategory=${idCategory}
-# item/ with any combination
-# !Avoid number=''
+""" By Filters # !Avoid number=''
+    Implement all int query here
+    item/?id=${id}&idCategory=${idCategory}
+    item/ with any combination
+    !Avoid number=''
+"""
 @api_view(['GET'])
 def getItemsByFilters(request):
     
@@ -50,6 +53,7 @@ def getItemsByFilters(request):
     #Get Response
     try:
         items = Item.objects.filter(**filters)
+        items = items.order_by('year')
         serializer = ItemSerializer(items, many=True)
         response = Response(serializer.data)       
     except (Item.DoesNotExist):
@@ -78,6 +82,54 @@ def getItemsByQuery(request):
 
     return response
 
+#SAVE new item
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def setItem(request):  
+    print(request)
+
+    #Get filters from request
+    params = {
+        "id": lambda value: { "id": value },
+        "name": lambda value: { "name": value },
+        "description": lambda value: { "description": value },
+        "image": lambda value: { "image" : value },
+        "year": lambda value: { "year" : value },
+        "idCategory": lambda value: { "idCategory" : value },
+        "brand": lambda value: { "brand" : value },
+        "tag": lambda value: { "tag" : value },
+        "price": lambda value: { "price" : value },
+        "available": lambda value: { "available" : True }        
+    }
+    fields = {}
+    data = request.POST
+    image = request.FILES.get('image')
+
+    for param, value in data.items():
+        if params[param]:
+            fields.update(params[param](value)) 
+            
+    idItem = fields.pop("id", None)
+    idCategory = fields.pop("idCategory", None)
+
+    try:
+        category = Category.objects.get(id=int(idCategory)) 
+
+        if idItem == "":
+            item = Item(**fields)      
+        else:
+            item = Item.objects.get(id=int(idItem))    
+            for key, value in fields.items():
+                setattr(item, key, value)
+        
+        item.idCategory = category   
+        item.image = image
+        item.save()
+        response = Response({'success': 'true'})
+    except (Item.DoesNotExist):
+        response = Response({"success": "false"})
+
+    return response
 
 #CATEGORY 
 # By Filters: category/?id=${id} or category/ 
@@ -118,6 +170,7 @@ def getConfiguration(request):
     return response
 
 @api_view(['POST'])
+@permission_classes([IsAdminUser])
 def setConfiguration(request):  
 
     #Get filters from request

@@ -4,65 +4,50 @@ import { Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
 import Loader from '../components/main/Loader'
 import Message from '../components/main/Message'
-import { updateUserProfile } from '../actions/userActions'
+import { getUserProfile, updateUserProfile } from '../actions/userActions'
 import FormUser from '../components/FormUser'
 
-function ProfileScreen() {
+function ProfileScreen({userInfo}) {
 
     const [message, setMessage] = useState('')
+
+    const userAuth = useSelector(state => state.userAuth)
+    const { error, loading, userToken } = userAuth
 
     const dispatch = useDispatch()
     const location = useLocation()
     const navigate = useNavigate()
     const redirect = location.state ? Number(location.state) : '/'
 
-    const user = useSelector(state => state.user)
-    const { error, loading, userInfo, success } = user
-
     useEffect(() => {
-        if (user == null) {
+        if (userInfo == null) {
             navigate(redirect)
         } 
-        // else {
-        //     if (!userInfo || !userInfo.first_name || success) {
-        //         dispatch({ type: USER_UPDATE_PROFILE_RESET })
-        //         dispatch(getUserDetails(userInfo.id))            
-        //     } else {
-        //         setName(userInfo.first_name)
-        //         setEmail(userInfo.email)
-
-        //     }
-        // }
-    }, [navigate, user])
+    }, [navigate, userInfo])
 
 
-    const submitHandler = (state, e) => {
+    const handleSubmit = (state, e) => {
         e.preventDefault()
-        if (state.password !== state.confirmPassword) {
-            setMessage('Password do not match')
-        } else {
-            const userData ={
-                id: userInfo.id,
-                username: state.username, 
-                password: state.password, 
-                first_name: state.firstName,
-                last_name: state.lastName,
-                email: state.email
-            }
-            dispatch(updateUserProfile(userData))
-        }
 
+        const formData = new FormData();
+        formData.append('id', state.id);
+        formData.append('username', state.username);
+        formData.append('first_name', state.first_name);
+        formData.append('last_name', state.last_name);
+        formData.append('email', state.email);
+        formData.append('password', state.password);
+
+        dispatch(updateUserProfile(formData, userToken.access))
     }
 
     return (
         <Row>
-            <Col md={3}>
-                <h2>User Profile</h2>
-                {message && <Message variant='danger'>{message}</Message>}
+            <Col md={6}>
+                {/* {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}
-                {loading && <Loader />}
+                {loading && <Loader />} */}
 
-                <FormUser submitHandler={submitHandler} userInfo={userInfo}></FormUser>
+                <FormUser handleSubmit={handleSubmit} state={userInfo}></FormUser>
 
             </Col>
         </Row>
