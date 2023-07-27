@@ -166,7 +166,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = '/images/'
+MEDIA_URL = 'http://3.72.53.53:8000/images/'
 
 STATICFILES_DIR = [
     BASE_DIR / 'static'
