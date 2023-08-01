@@ -103,7 +103,7 @@ export const setItem = (formData, access) => async (dispatch) => {
 
         const config = {
             headers: {
-                'Content-type': 'application/json',
+                'Content-type': 'multipart/form-data',
                 Authorization: `Bearer ${access}`
             }
         }

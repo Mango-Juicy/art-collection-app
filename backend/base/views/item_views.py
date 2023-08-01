@@ -104,11 +104,11 @@ def setItem(request):
     fields = {}
     data = request.POST
     image = request.FILES.get('image')
-
+    
     for param, value in data.items():
         if params[param]:
             fields.update(params[param](value)) 
-            
+    
     idItem = fields.pop("id", None)
     idCategory = fields.pop("idCategory", None)
 

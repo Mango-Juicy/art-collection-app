@@ -20,8 +20,8 @@ function SecManagerItems() {
     const [showDialog, setShowDialog] = useState(false);
     const [itemToEdit, setItemToEdit] = useState({})
 
-    const user = useSelector(state => state.user)
-    const { userInfo } = user 
+    const userAuth = useSelector(state => state.userAuth)
+    const { userToken } = userAuth 
     const itemList = useSelector(state => state.itemList)
     const { error, loading, items } = itemList    
     const categoryList = useSelector(state => state.categoryList)
@@ -77,7 +77,8 @@ function SecManagerItems() {
         formData.append('year', state.year);
         formData.append('available', state.available);
 
-        dispatch(setItem(formData, userInfo.access))
+    
+        dispatch(setItem(formData, userToken.access))
         dispatch(getItemById())
     }
 
