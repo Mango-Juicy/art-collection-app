@@ -22,6 +22,8 @@ import {
     CONFIG_UPDATE_FAIL
 } from '../constants/itemConstants'
 
+axios.defaults.baseURL = 'http://3.72.53.53:8000';
+
 
 //getItemsByFilters
 export const getItemsByCategory = (idCategory) => async (dispatch) => {

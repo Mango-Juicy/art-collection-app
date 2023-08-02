@@ -26,7 +26,7 @@ import {
 } from '../constants/userConstants'
 
 
-
+axios.defaults.baseURL = 'http://3.72.53.53:8000';
 
 
 export const register = (user) => async (dispatch) => {
