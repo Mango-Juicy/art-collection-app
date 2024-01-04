@@ -9,6 +9,10 @@ import {
     ITEM_DETAILS_SUCCESS,
     ITEM_DETAILS_FAIL,
 
+    ITEM_UPDATE_REQUEST,
+    ITEM_UPDATE_SUCCESS,
+    ITEM_UPDATE_FAIL,
+
     CATEGORY_LIST_REQUEST,
     CATEGORY_LIST_SUCCESS,
     CATEGORY_LIST_FAIL,
@@ -22,7 +26,7 @@ import {
     CONFIG_UPDATE_FAIL
 } from '../constants/itemConstants'
 
-axios.defaults.baseURL = 'http://3.72.53.53:8000';
+// axios.defaults.baseURL = 'http://3.72.53.53:8000';
 
 
 //getItemsByFilters
@@ -100,7 +104,7 @@ export const getItemsBySearch = (params) => async (dispatch) => {
 export const setItem = (formData, access) => async (dispatch) => {
     try {
         dispatch({ 
-            type: CONFIG_UPDATE_REQUEST 
+            type: ITEM_UPDATE_REQUEST 
         })
 
         const config = {
@@ -115,16 +119,15 @@ export const setItem = (formData, access) => async (dispatch) => {
             formData,
             config
         )
-        console.log(data)
 
         dispatch({
-            type: CONFIG_UPDATE_SUCCESS,
+            type: ITEM_UPDATE_SUCCESS,
             payload: data
         })
 
     } catch (error) {
         dispatch({
-            type: CONFIG_UPDATE_FAIL,
+            type: ITEM_UPDATE_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,

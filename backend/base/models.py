@@ -27,6 +27,7 @@ class Item(models.Model):
     image = models.ImageField(null=True, blank=True, default='/placeholder.png')
     brand = models.CharField(max_length=200, null=True, blank=True)
     idCategory = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    columnsNumber = models.IntegerField(null=True, blank=True, default=0)
     tag = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     available = models.BooleanField(null=True, blank=True, default=True)

@@ -22,7 +22,7 @@ function Header({categories, title}) {
     const items = categories.filter(categories => categories.menu === menuLabel)
     
     return(
-      <NavDropdown key={index} className='m-1' menuVariant='dark' title={menuLabel} id={index} >
+      <NavDropdown key={index} className='m-1 fs-6' menuVariant='dark' title={menuLabel} id={index} >
         {items.map((category) => (
           <LinkContainer key={category.id} to={category.url}>
             <NavDropdown.Item>{category.label}</NavDropdown.Item>
@@ -37,7 +37,7 @@ function Header({categories, title}) {
   const userDropdown = () => {
     return(
       userInfo ? (
-        <NavDropdown className='m-1' align="end" menuVariant='dark' title={userInfo.first_name} id='username'>
+        <NavDropdown className='m-1 fs-6' align="end" menuVariant='dark' title={userInfo.first_name} id='username'>
 
           <LinkContainer to='/profile'>
             <NavDropdown.Item>Profile</NavDropdown.Item>
@@ -54,7 +54,7 @@ function Header({categories, title}) {
 
         </NavDropdown>
       ) : (
-        <LinkContainer className='m-1' to="/login">
+        <LinkContainer className='m-1 fs-6' to="/login">
           <Nav.Link>Accedi</Nav.Link>
         </LinkContainer>
       )
@@ -65,8 +65,7 @@ function Header({categories, title}) {
     <div>
       <header>
         <Navbar className='c-primary py-0' variant='dark' expand="lg" collapseOnSelect>
-          <Container>
-
+          <Container fluid>
             <LinkContainer to={'/'} >
               <Navbar.Brand >{title}</Navbar.Brand>
             </LinkContainer>
@@ -80,7 +79,7 @@ function Header({categories, title}) {
                   dropdown(menuLabel, index)           
                 ))}
 
-                <LinkContainer className='m-1' to="/contatti">
+                <LinkContainer className='m-1 fs-6' to="/contatti">
                   <Nav.Link>Contatti</Nav.Link>
                 </LinkContainer>
 
@@ -88,7 +87,7 @@ function Header({categories, title}) {
                 
               </Nav>
             </Navbar.Collapse>
-            
+
           </Container>
         </Navbar>
       </header>

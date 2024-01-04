@@ -5,10 +5,33 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from base.models import *
 from base.serializers import *
 import json
+from backend.settings import AWS_STORAGE_BUCKET_NAME
+import boto3
+
+#Upload images to AWS 
+def uploadImageToS3(image, imageName):
+    s3 = boto3.client('s3') 
+    s3.put_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=imageName, Body=image)
+    
+
+#Paging
+def paging(items, pageNumber):
+    paginator = Paginator(items, 10)
+    
+    try: 
+        paginatedPage = paginator.page(pageNumber)
+    except PageNotAnInteger: 
+        pageNumber = 1
+    except EmptyPage: 
+        pageNumber = paginator.num_pages
+    
+    return paginator.page(pageNumber)
+    
 
 #Logical Expressions
 def getQueryResponse(idCategory, yearFrom, yearTo, query):
@@ -20,6 +43,7 @@ def getQueryResponse(idCategory, yearFrom, yearTo, query):
             year__gte=int(yearFrom),
             year__lte=int(yearTo)
     )
+    items = items.order_by('year')
     serializer = ItemSerializer(items, many=True)
     
     if serializer:
@@ -42,18 +66,25 @@ def getItemsByFilters(request):
     #Get filters from request
     params = {
         "id": lambda value: { "id": value },
-        "idCategory": lambda value: { "idCategory": value }
+        "idCategory": lambda value: { "idCategory": value },
+        "page": lambda value: { "page": value}
     }
     filters = {}
 
     for param, value in request.GET.items():
         if params[param]:
             filters.update(params[param](value))            
+    
+    page = filters.pop("page", None)
 
     #Get Response
     try:
         items = Item.objects.filter(**filters)
         items = items.order_by('year')
+        
+        #TODO: PAGING        
+        items = paging(items, page)
+        
         serializer = ItemSerializer(items, many=True)
         response = Response(serializer.data)       
     except (Item.DoesNotExist):
@@ -86,7 +117,6 @@ def getItemsByQuery(request):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def setItem(request):  
-    print(request)
 
     #Get filters from request
     params = {
@@ -97,6 +127,7 @@ def setItem(request):
         "year": lambda value: { "year" : value },
         "idCategory": lambda value: { "idCategory" : value },
         "brand": lambda value: { "brand" : value },
+        "columnsNumber": lambda value: { "columnsNumber" : value },
         "tag": lambda value: { "tag" : value },
         "price": lambda value: { "price" : value },
         "available": lambda value: { "available" : True }        
@@ -108,9 +139,10 @@ def setItem(request):
     for param, value in data.items():
         if params[param]:
             fields.update(params[param](value)) 
-    
+ 
     idItem = fields.pop("id", None)
     idCategory = fields.pop("idCategory", None)
+    fields.pop("image", None)
 
     try:
         category = Category.objects.get(id=int(idCategory)) 
@@ -122,14 +154,18 @@ def setItem(request):
             for key, value in fields.items():
                 setattr(item, key, value)
         
-        item.idCategory = category   
-        item.image = image
+        item.idCategory = category 
+
+        if image:
+            uploadImageToS3(image=image, imageName=str(image))
+            item.image = image
         item.save()
-        response = Response({'success': 'true'})
+        response = Response({'success': True,'idItem': item.id})
     except (Item.DoesNotExist):
-        response = Response({"success": "false"})
+        response = Response({"success": False})
 
     return response
+
 
 #CATEGORY 
 # By Filters: category/?id=${id} or category/ 

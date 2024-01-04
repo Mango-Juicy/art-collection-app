@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+import { handleConfig } from './global/functions';
+
 import Header from './components/main/Header';
 import Footer from './components/main/Footer';
 import Loader from './components/main/Loader';
@@ -20,7 +22,6 @@ import ManagerScreen from './screens/ManagerScreen';
 import { getCategory, getConfiguration } from './actions/itemActions';
 
 import { useDispatch, useSelector, } from 'react-redux'
-import { getUserProfile } from './actions/userActions';
 
 
 function App() {
@@ -39,23 +40,12 @@ function App() {
 
   // CATEGORY
   const categoryList = useSelector(state => state.categoryList)
-  const { errorCategory, loadingCategory, categories } = categoryList
+  const { categories } = categoryList
 
   // CONFIGURATION
   const configList = useSelector(state => state.configList)
-  const { configs } = configList  
+  const { loadingConfig, configs } = configList  
   const [configInfo, setConfigInfo] = useState({})
-
-  const handleConfig = (setting, settingField) => {
-    const value = configs
-        ?.filter(config => 
-          config.setting === setting && 
-          config.settingField === settingField)
-        .map(config => 
-          config.value
-    )
-    return value.toString()
-  }
 
   // Dynamically set the root variables
   const setRootVariables = (config) => {
@@ -73,12 +63,12 @@ function App() {
   // configInfo
   useEffect(() => {
     setConfigInfo({
-      title: handleConfig("title","title"),
-      email: handleConfig("contacts","email"),
-      phone: handleConfig("contacts","phone"),
-      colorPrimary: handleConfig("colorPalette","colorPrimary"),
-      colorSecondary: handleConfig("colorPalette","colorSecondary"),
-      colorAccent: handleConfig("colorPalette","colorAccent")
+      title: handleConfig(configs,"title","title"),
+      email: handleConfig(configs,"contacts","email"),
+      phone: handleConfig(configs,"contacts","phone"),
+      colorPrimary: handleConfig(configs,"colorPalette","colorPrimary"),
+      colorSecondary: handleConfig(configs,"colorPalette","colorSecondary"),
+      colorAccent: handleConfig(configs,"colorPalette","colorAccent")
     })  
   }, [configs])
 
@@ -92,7 +82,7 @@ function App() {
     : <Router>
         <Header categories={categories} title={configInfo.title}/>
         <main className="">
-          <Container>
+          <Container fluid>   
             <Routes>
 
             <Route path="/" element={<HomeScreen categories={categories}/>} exact />
@@ -120,12 +110,12 @@ function App() {
               {/* STAFF ONLY */}
               {
                 userInfo === null ? <></> 
-                : userInfo.is_staff ? <Route path="/manager/" element={<ManagerScreen configInfo={configInfo}/>} />
+                : userInfo.is_staff ? <Route path="/manager/" element={<ManagerScreen loadingConfig={loadingConfig} configInfo={configInfo}/>} />
                 : <></>
               }
               
 
-            </Routes>
+            </Routes>         
           </Container>        
         </main>
         <Button variant='primary' onClick={printState}>

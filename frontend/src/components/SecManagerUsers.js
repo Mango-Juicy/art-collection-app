@@ -3,10 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { Row, Col, Button, Container, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
 
-import Loader from './main/Loader'
-import Message from './main/Message'
-import CardDetail from './CardDetail'
-import FormItem from './FormItem'
+import { handleErrorLoading } from '../global/functions'
+import LayoutGrid from './main/LayoutGrid'
 
 import { getItemById, getItemsBySearch } from '../actions/itemActions'
 import { getUser, setUser } from '../actions/userActions'
@@ -21,15 +19,52 @@ function SecManagerUsers() {
     
     const [showDialog, setShowDialog] = useState(false);
     const [itemToEdit, setItemToEdit] = useState({})
+    const [title, setTitle] = useState("")
 
-    const user = useSelector(state => state.user)
-    const { userInfo } = user 
+    const userAuth = useSelector(state => state.userAuth)
+    const { userToken } = userAuth 
 
     const userList = useSelector(state => state.userList)
-    const { error, loading, users } = userList    
+    const { error, loading, users } = userList   
+    
+    const columnSetting = [
+        {
+            key: "username",
+            label: "Username",
+            sm: 3,
+            md: 3,
+            lg: 3,
+            xl: 3
+        },
+        {
+            key: "first_name",
+            label: "Name",
+            sm: 4,
+            md: 4,
+            lg: 4,
+            xl: 4
+        },
+        {
+            key: "email",
+            label: "Email",
+            sm: 3,
+            md: 3,
+            lg: 3,
+            xl: 3
+        },
+        {
+            key: "button",
+            label: "Edit",
+            sm: 2,
+            md: 2,
+            lg: 2,
+            xl: 2
+        }
+    ];
+
 
     useEffect(() => {
-        dispatch(getUser(userInfo.access))
+        dispatch(getUser(userToken.access))
     }, [])
 
     //TODO: search user
@@ -56,6 +91,7 @@ function SecManagerUsers() {
 
     const handleEdit = (item) => {
         setItemToEdit(item)
+        setTitle("Modifica Utente")
         setShowDialog(true)
     }
 
@@ -74,114 +110,80 @@ function SecManagerUsers() {
         formData.append('email', state.email);
         formData.append('password', state.password);
 
-        dispatch(setUser(formData, userInfo.access))
-        dispatch(getUser(userInfo.access))
+        dispatch(setUser(formData, userToken.access))
+        dispatch(getUser(userToken.access))
     }
 
     const handleAdd = () => {
-        setShowDialog(true)
-        setItemToEdit("")        
+        setItemToEdit("") 
+        setTitle("Aggiungi Utente")
+        setShowDialog(true)       
     }
 
-    // TODO: Export this function as global
-    const handleErrorLoading = (error, loading, content) => {
-        return(
-            error ? <Message variant='danger'>{error}</Message>
-            : (
-                loading ? <Loader/>
-                :   content
-            )
-        )
-    }
 
-    // Safe content 
-    const content = () => {
+    
+    // INTERFACE
+    // Title, Add, Filters
+    const header = () => {
         return(
-            <>           
-                <div className='c-primary p-3 my-2'>
-                    <Row>                    
-                        <Col>
-                            <h4 className='text-white mt-2 mb-0'>Items</h4>                                                     
-                        </Col>
-                        <Col className='text-end'>
-                        
-                            <Button      
-                                variant="dark" 
-                                className='text-white c-orange py-1 fs-6 m-0' 
-                                id="button-2"   
-                                onClick={() => handleAdd()}                                 
-                                >Aggiungi
-                            </Button>                                                     
-                        </Col>
-                    </Row>
-                
+            <>
+                <Row>                    
+                    <Col>
+                        <h4 className='text-white mt-2 mb-0'>Items</h4>                                                     
+                    </Col>
+                    <Col className='text-end'>
                     
-                    <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>                
-                    <SecFilters submitHandler={searchHandler}></SecFilters>
-                    <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>
-
-                    <Row className='m-0 text-white c-primary'>                    
-                        <Col className='p-0'  sm={3} md={3} lg={3} xl={3}>
-                            <p className='m-2'>Username</p>                                                       
-                        </Col>  
-                        <Col className='p-0' sm={4} md={4} lg={4} xl={4}>
-                            <p className='m-2'>Name</p>                                                       
-                        </Col>  
-                        <Col className='p-0'  sm={3} md={3} lg={3} xl={3}>
-                            <p className='m-2'>Email</p>                                                       
-                        </Col>          
-                        <Col className='p-0' sm={2} md={2} lg={2} xl={2}>                                                    
-                        </Col>                                      
-                    </Row>
-                    <hr className='my-2  text-white' style={{height: "1px"}}/>
-
-                    {                 
-                        users.map((user) => (       
-                            <Row className='m-1 text-white' key={user.id} >                    
-                                <Col className='p-0' sm={3} md={3} lg={3} xl={3}>
-                                    <p className='m-2'>{user.username}</p>                                                       
-                                </Col>  
-                                <Col className='p-0' sm={4} md={4} lg={4} xl={4}>
-                                        <p className='m-2'>{user.first_name + " " + user.last_name}</p>                                                       
-                                </Col>  
-                                <Col className='p-0' sm={3} md={3} lg={3} xl={3}>
-                                        <p className='m-2'>{user.email}</p>                                                       
-                                </Col>      
-                                <Col className='p-0 text-end' sm={2} md={2} lg={2} xl={2}>
-                                        <Button      
-                                            variant="dark" 
-                                            className='text-white c-secondary py-1 fs-6' 
-                                            id="button-2"   
-                                            onClick={() => handleEdit(user)}                                 
-                                            >Modifica
-                                        </Button>                                                         
-                                </Col>                                              
-                                <hr className='my-2' style={{height: "1px"}}/>
-                            </Row>
-                        )) 
-                    }  
-                </div>
-
-                <Modal size="lg" show={showDialog} onHide={handleCancel}>
-                    <div className='c-primary'>
-                        <FormUser 
-                            state={itemToEdit}
-                            handleSubmit={handleSubmit}
-                            handleCancel={handleCancel}
-                        >
-                        </FormUser>
-                    </div>  
-                </Modal>
+                        <Button      
+                            variant="dark" 
+                            className='text-white c-orange py-1 fs-6 m-0' 
+                            id="button-2"   
+                            onClick={() => handleAdd()}                                 
+                            >Aggiungi
+                        </Button>                                                     
+                    </Col>
+                </Row>
+            
+                
+                <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>                
+                <SecFilters submitHandler={searchHandler}></SecFilters>
+                <hr className='my-2' style={{height: "2px", backgroundColor: "white"}}/>
             </>
         )
     }
 
+
+
     return (                  
-        handleErrorLoading(
-            error,
-            loading,
-            content()
-        )      
+        <>           
+            <div className='c-primary p-3 my-2'>
+            {header()}
+
+            {   
+                    //GRID
+                    handleErrorLoading(
+                        error,
+                        loading,
+                        <LayoutGrid 
+                            columns={columnSetting}
+                            data={users}
+                            handleEdit={handleEdit}
+                        ></LayoutGrid>
+                    )
+                }  
+            </div>
+
+            <Modal size="lg" show={showDialog} onHide={handleCancel}>
+                <div className='c-primary'>
+                    <FormUser 
+                        state={itemToEdit}
+                        handleSubmit={handleSubmit}
+                        handleCancel={handleCancel}
+                        title={title}
+                    >
+                    </FormUser>
+                </div>  
+            </Modal>
+        </>  
     )
 
 }

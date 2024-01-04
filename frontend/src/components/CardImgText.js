@@ -7,6 +7,7 @@ function CardImgText({ item }) {
   const textEl = useRef(null)
   const imgEl = useRef(null)
 
+  // TODO FIX 
   const handleImgLoad = () => {
     const imgHeight = imgEl.current.clientHeight
     const lineHeight = parseInt(window.getComputedStyle(textEl.current).lineHeight);
@@ -17,7 +18,7 @@ function CardImgText({ item }) {
     textEl.current.style.display = '-webkit-box';
     textEl.current.style.webkitBoxOrient = 'vertical';
 
-    textEl.current.style.webkitLineClamp = numLines - 5;
+    textEl.current.style.webkitLineClamp = 15;
   };
 
  
@@ -25,11 +26,11 @@ function CardImgText({ item }) {
     <Card className="my-5 p-0 c-primary border-0 " >
       <Row>
 
-        <Col>         
+        <Col sm={6} md={6} lg={6} xl={6}>         
           <Card.Img ref={imgEl}  onLoad={handleImgLoad}  className="border-0" src={item.image} id='img' />   
         </Col>
 
-        <Col >   
+        <Col sm={6} md={6} lg={6} xl={6}>   
           <Card.Body className="my-0 pb-0 text-white">
             
             <Card.Title as="div">

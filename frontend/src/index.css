@@ -9,6 +9,7 @@
 #root{ 
    background-color: var(--secondary-color);
    font-family: 'Century Gothic';
+   font-size: x-small;
 }
 
 .nav-item .dropdown-menu {
@@ -61,4 +62,7 @@ h3{
 }
 .c-gray-2{
   background-color: red;
+}
+.text-green{
+  color: green;
 }

@@ -6,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { getItemsByCategory, getItemsBySearch } from '../actions/itemActions'
 import SecCards from '../components/SecCards'
 import SecFilters from '../components/SecFilters';
+import Loader from '../components/main/Loader';
 
 function MainScreen({idCategory}) {  
 
@@ -44,7 +45,8 @@ function MainScreen({idCategory}) {
       <hr className='my-1' style={{height: "2px", backgroundColor: "white"}}/>
       <SecFilters submitHandler={searchHandler}></SecFilters>      
       <hr className='my-1' style={{height: "2px", backgroundColor: "white"}}/>
-      <SecCards items={items} idCategory={idCategory}></SecCards>
+      {loading ? <Loader></Loader>
+      : <SecCards items={items} idCategory={idCategory}></SecCards>}
     </>
   )
 }

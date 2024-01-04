@@ -26,7 +26,7 @@ import {
 } from '../constants/userConstants'
 
 
-axios.defaults.baseURL = 'http://3.72.53.53:8000';
+// axios.defaults.baseURL = 'http://3.72.53.53:8000';
 
 
 export const register = (user) => async (dispatch) => {
@@ -116,10 +116,11 @@ export const getUserToken = (username, password) => async (dispatch) => {
     }
 }
 
-// Remove from localStorage: userInfo, 
+// Remove from localStorage: userInfo, userToken
 // Nullify from store: userInfo, userAuth
 export const logout = () => (dispatch) => {
     localStorage.removeItem('userToken')
+    localStorage.removeItem('userInfo')
     dispatch({ type: USER_LOGOUT })
     dispatch({ type: USER_DETAILS_RESET })
 }
@@ -132,8 +133,6 @@ export const getUserProfile = (userToken) => async (dispatch, getState) => {
             type: USER_DETAILS_REQUEST
         })
 
-        console.log("getUserProfile")
-        console.log(userToken)
         const config = {
             headers: {
                 'Content-type': 'application/json',
@@ -149,7 +148,7 @@ export const getUserProfile = (userToken) => async (dispatch, getState) => {
             payload: data
         })
 
-        localStorage.setItem('userProfile', JSON.stringify(data))
+        localStorage.setItem('userInfo', JSON.stringify(data))
 
 
     } catch (error) {

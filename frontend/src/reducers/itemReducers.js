@@ -7,6 +7,10 @@ import {
     ITEM_DETAILS_SUCCESS,
     ITEM_DETAILS_FAIL,
 
+    ITEM_UPDATE_REQUEST,
+    ITEM_UPDATE_SUCCESS,
+    ITEM_UPDATE_FAIL,
+
     CATEGORY_LIST_REQUEST,
     CATEGORY_LIST_SUCCESS,
     CATEGORY_LIST_FAIL,
@@ -88,6 +92,27 @@ export const configListReducer = (state = { configs: [] }, action) => {
 
         case CONFIG_LIST_FAIL:
             return { loadingConfig: false, errorConfig: action.payload }
+
+        default:
+            return state
+    }
+}
+
+
+// Confirmation Response
+export const responseSetItemReducer = (state = { status: {} }, action) => {
+    switch (action.type) {
+        case ITEM_UPDATE_REQUEST:
+            return  { loadingResponse: true, status: {} }
+
+        case ITEM_UPDATE_SUCCESS:
+            return {
+                loadingResponse: false, 
+                status: action.payload,
+            }
+
+        case ITEM_UPDATE_FAIL:
+            return { loadingResponse: false, errorResponse: action.payload }
 
         default:
             return state

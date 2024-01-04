@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector, } from 'react-redux'
-import Loader from '../components/main/Loader'
-import Message from '../components/main/Message'
+
+import {handleErrorLoading} from '../global/functions'
+
 import { getUserProfile, updateUserProfile } from '../actions/userActions'
 import FormUser from '../components/FormUser'
 
@@ -40,15 +41,22 @@ function ProfileScreen({userInfo}) {
         dispatch(updateUserProfile(formData, userToken.access))
     }
 
+    const content = () => {
+        return(
+            <FormUser handleSubmit={handleSubmit} title={"Aggiungi User"} state={userInfo}></FormUser>
+        )
+    }
+
     return (
         <Row>
             <Col md={6}>
-                {/* {message && <Message variant='danger'>{message}</Message>}
-                {error && <Message variant='danger'>{error}</Message>}
-                {loading && <Loader />} */}
-
-                <FormUser handleSubmit={handleSubmit} state={userInfo}></FormUser>
-
+           { 
+                handleErrorLoading(
+                    error,
+                    loading,
+                    content()
+                )
+           }
             </Col>
         </Row>
     )

@@ -19,8 +19,6 @@ class FormUser extends React.Component {
             password:  "",
             confirmPassword:  ""
         }
-        console.log(this.state.password)
-            
     
     }
 
@@ -127,7 +125,7 @@ class FormUser extends React.Component {
 		return (
 
             <div className='c-primary p-3 my-2'>
-                <h4 className='text-white'>Aggiungi User</h4>
+                <h4 className='text-white'>{this.props.title}</h4>
                 
                 <hr className='mb-3 mt-2' style={{height: "2px", backgroundColor: "white"}}/>
 

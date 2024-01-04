@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
 
 import { Button, Modal } from 'react-bootstrap'
+
+import { handleErrorLoading,  getIdConfig} from '../global/functions'
+
 import { setConfiguration, getConfiguration } from '../actions/itemActions'
 
 import FormGeneral from './FormGeneral'
-import Loader from './main/Loader'
-import Message from './main/Message'
 
 
 function SecManagerGeneral({errorConfig, loadingConfig, configInfo}) {
@@ -19,17 +20,6 @@ function SecManagerGeneral({errorConfig, loadingConfig, configInfo}) {
     const configList = useSelector(state => state.configList)
     const { configs } = configList  
 
-    // TODO: Export this function as global
-    const idConfig = (settingField) => {
-        const id = configs
-            ?.filter(config => 
-              config.settingField === settingField)
-            .map(config => 
-              config.id
-        )
-        return id
-    }
-
     // TODO: confirmation message
     const handleUpdate = (e) => {
         dispatch(getConfiguration()) 
@@ -41,23 +31,12 @@ function SecManagerGeneral({errorConfig, loadingConfig, configInfo}) {
         
         for (const [key, value] of Object.entries(state)) {
             const data = {
-                id: idConfig(key),
+                id: getIdConfig(configs,key),
                 value: value
             }
             dispatch(setConfiguration(data)) 
         }
         setShowDialog(true);        
-    }
-
-    // TODO: Export this function as global
-    const handleErrorLoading = (error, loading, content) => {
-        return(
-            error ? <Message variant='danger'>{error}</Message>
-            : (
-                loading ? <Loader/>
-                :   content
-            )
-        )
     }
     
     // Safe content 
@@ -91,10 +70,11 @@ function SecManagerGeneral({errorConfig, loadingConfig, configInfo}) {
         )
     }
 
+
     return (                  
         handleErrorLoading(
             errorConfig,
-            loadingConfig,
+            (loadingConfig || configInfo.title === ""),
             content()
         )      
     )
